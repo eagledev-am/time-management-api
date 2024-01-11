@@ -9,7 +9,6 @@ The Todo List API provides a powerful and flexible backend for managing tasks an
 * [Usage]()
   * [Authentication]()
   * [Endpoints]()
-* [Examples]()
 
 #  Features
 * Task Operation: create,retrieve,update and delete task
