@@ -49,8 +49,8 @@ docker compose up -d
 // one for application
 // one for database  
 ```
-The application is running in <font color="blue"> http://localhost:8080 </font>
-The database is running in <font color="blue"> http://localhost:3306 </font>
+The application is running in <font color="blue"> http://localhost:8080 </font></br>
+The database is running in <font color="blue"> http://localhost:3306 </font></br></br>
 2- To Stop and remove all containers 
 ```
 docker compose down
@@ -67,11 +67,30 @@ docker compose down
  ```
  #### **Endpoints**
  * Tasks
+   </br>
    | Method | Endpoint | description |
    | :------: | :------: | :------:|
    | GET | /api/tasks/:id | get a task |
    | POST | /api/lists/:list_id/tasks| create a task at specified list |
    | PUT | /api/tasks/:id  | update a task |
    | DELETE | /api/tasks/:id | delete a task |
-
+   | GET | /api/users/:user_id/tasks | get all tasks of user |
+   | GET | api/users/:user_id/tasks?status= | get tasks based on status |
+   | GET | /api/lists/:list_id/tasks | get all tasks of a list |
+* Lists
+  </br>
+     | Method | Endpoint | description |
+   | :------: | :------: | :------:|
+   | GET | /api/lists/:list_id/tasks| get a tasks of a list |
+   | POST | /api/users/:user_id/lists| create a list for a user |
+   | DELETE | /api/lists/:id| delete a list |
+   | GET | /api/users/:id/lists | get all list of a user |
+* User
+  </br>
+       | Method | Endpoint | description |
+   | :------: | :------: | :------:|
+   | GET | /api/users/:id| get a user |
+   | PUT | /api/users/:id| update user data |
+   | DELETE | /api/lists/:id| delete a user |
+    
   
