@@ -55,6 +55,23 @@ The database is running in <font color="blue"> http://localhost:3306 </font>
 ```
 docker compose down
 ```
-
+# Usage 
+ ### **Authentication**
+ Create new User:
+ ```
+  POST /api/auth/register
+ ```
+ Authenticate user and Access Token
+ ```
+  POST /api/auth/login
+ ```
+ #### **Endpoints**
+ * Tasks
+   | Method | Endpoint | description |
+   | :------: | :------: | :------:|
+   | GET | /api/tasks/:id | get a task |
+   | POST | /api/lists/:list_id/tasks| create a task at specified list |
+   | PUT | /api/tasks/:id  | update a task |
+   | DELETE | /api/tasks/:id | delete a task |
 
   
