@@ -2,20 +2,23 @@
 The Todo List API provides a powerful and flexible backend for managing tasks and to-dos in your applications. Designed with simplicity and extensibility in mind, this API enables seamless integration of task management functionalities.
 
 # Table Of Contents
-* [Features]()
-* [Getting Started]()
-  * [Prerequisites]()
-  * [Installation]()
-* [Usage]()
-  * [Authentication]()
-  * [Endpoints]()
+* [Features](#Features)
+* [Getting Started](#GettingStarted)
+  * [Prerequisites](#Prerequisites)
+  * [Installation](#installation)
+* [Usage](#Usage)
+  * [Authentication](#Authentication)
+  * [Endpoints](#Endpoints)
 
+<a name="Features"></a>
 #  Features
 * Task Operation: create,retrieve,update and delete task
 * Task List: Organize tasks into lists ( categories or tags )
 * User Authentication: use JWT to authenticate user accounts
 * Filtering and Search: find user tasks based on status
+<a name="GettingStarted"></a>
 # Getting Started 
+<a name="Prerequisites"></a>
 ## Prerequisites
 * Java ( JDK 17 )
 * MySQL database ( your chioce )
@@ -23,6 +26,7 @@ The Todo List API provides a powerful and flexible backend for managing tasks an
 * IDE ( your choice )
 * Postman or a similar tool for API testing
 * Docker
+<a name="installation"></a>
 ## installation
 1- clone repository
 ```
@@ -54,7 +58,9 @@ The database is running in <font color="blue"> http://localhost:3306 </font></br
 ```
 docker compose down
 ```
+<a name="Usage"></a>
 # Usage 
+<a name="Authentication"></a>
  ### **Authentication**
  Create new User:
  ```
@@ -64,32 +70,33 @@ docker compose down
  ```
   POST /api/auth/login
  ```
+<a name="Endpoints"></a>
  #### **Endpoints**
  * Tasks
    </br>
    | Method | Endpoint | description |
    | :------: | :------: | :------:|
-   | GET | /api/tasks/:id | get a task |
-   | POST | /api/lists/:list_id/tasks| create a task at specified list |
-   | PUT | /api/tasks/:id  | update a task |
-   | DELETE | /api/tasks/:id | delete a task |
-   | GET | /api/users/:user_id/tasks | get all tasks of user |
-   | GET | api/users/:user_id/tasks?status= | get tasks based on status |
-   | GET | /api/lists/:list_id/tasks | get all tasks of a list |
+   | GET | /api/tasks/:id | Get a task |
+   | POST | /api/lists/:list_id/tasks| Create a task at specified list |
+   | PUT | /api/tasks/:id  | Update a task |
+   | DELETE | /api/tasks/:id | Delete a task |
+   | GET | /api/users/:user_id/tasks | Get all tasks of user |
+   | GET | api/users/:user_id/tasks?status= | Get tasks based on status |
+   | GET | /api/lists/:list_id/tasks | Get all tasks of a list |
 * Lists
   </br>
      | Method | Endpoint | description |
    | :------: | :------: | :------:|
-   | GET | /api/lists/:list_id/tasks| get a tasks of a list |
-   | POST | /api/users/:user_id/lists| create a list for a user |
-   | DELETE | /api/lists/:id| delete a list |
-   | GET | /api/users/:id/lists | get all list of a user |
+   | GET | /api/lists/:list_id/tasks| Get a tasks of a list |
+   | POST | /api/users/:user_id/lists| Create a list for a user |
+   | DELETE | /api/lists/:id| Delete a list |
+   | GET | /api/users/:id/lists | Get all list of a user |
 * User
   </br>
        | Method | Endpoint | description |
    | :------: | :------: | :------:|
-   | GET | /api/users/:id| get a user |
-   | PUT | /api/users/:id| update user data |
-   | DELETE | /api/lists/:id| delete a user |
+   | GET | /api/users/:id| Get a user |
+   | PUT | /api/users/:id| Update user data |
+   | DELETE | /api/lists/:id| Delete a user |
     
   
