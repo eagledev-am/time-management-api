@@ -9,6 +9,8 @@ The Todo List API provides a powerful and flexible backend for managing tasks an
 * [Usage](#Usage)
   * [Authentication](#Authentication)
   * [Endpoints](#Endpoints)
+* [Examples](#examples)
+* [Contact](#contact)
 
 <a name="Features"></a>
 #  Features
@@ -98,5 +100,12 @@ docker compose down
    | GET | /api/users/:id| Get a user |
    | PUT | /api/users/:id| Update user data |
    | DELETE | /api/lists/:id| Delete a user |
-    
+
+<a name="examples"></a>
+# Examples
+You can test api using [Postman](https://www.postman.com/navigation-astronomer-98011947/workspace/api/collection/29779062-3cdf8018-1481-4f33-9abd-e2dcc9ac0b5d?action=share&creator=29779062)
+
+<a name="contact"></a>
+#Contact
+**Email:** [magdyabdo484@gamil.com](mailto:magdyabdo484@gmail.com)
   
