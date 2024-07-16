@@ -39,7 +39,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserDtoRequest updateUser(long id, UserDtoRequest userDto) {
+    public UserCreationRequest updateUser(long id, UserCreationRequest userDto) {
         User user= repo.findById(id)
                 .orElseThrow(() -> new UserException(UserException.USER_NOT_FOUND , HttpStatus.NOT_FOUND.value()));
 
@@ -60,7 +60,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<UserDtoRequest> getAllUsers() {
+    public List<UserCreationRequest> getAllUsers() {
         List<User> users= repo.findAll();
 
         if(users.isEmpty()){
@@ -82,8 +82,7 @@ public class UserServiceImp implements UserService {
         return UserDto.builder()
                 .id(user.getId())
                 .userName(user.getUsername())
-                .password(user.getPassword())
-                .role(user.getRole())
+                .email(user.getEmail())
                 .categories(list)
                 .build();
     }

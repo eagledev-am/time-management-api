@@ -3,7 +3,7 @@ package com.eagledev.todoapi.services.ServiceImp;
 import com.eagledev.todoapi.entities.User;
 import com.eagledev.todoapi.models.AuthRequest;
 import com.eagledev.todoapi.models.JwtResponse;
-import com.eagledev.todoapi.models.UserDtoRequest;
+import com.eagledev.todoapi.models.UserCreationRequest;
 import com.eagledev.todoapi.repos.UserRepo;
 import com.eagledev.todoapi.security.JwtService;
 import com.eagledev.todoapi.services.AuthService;
@@ -31,7 +31,7 @@ public class AuthServiceImp implements AuthService {
 
 
     @Override
-    public JwtResponse registerUser(UserDtoRequest userDtoRequest) {
+    public JwtResponse registerUser(UserCreationRequest userDtoRequest) {
         User user = User.builder()
                 .userName(userDtoRequest.getUserName())
                 .password(passwordEncoder.encode(userDtoRequest.getPassword()))
