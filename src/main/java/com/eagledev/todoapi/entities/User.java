@@ -21,16 +21,22 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
     @Column(unique = true , nullable = false)
-    String userName;
+    private String userName;
 
     @Column(nullable = false)
-    String password;
+    private String password;
+
+    @Column(unique = true , nullable = false)
+    private String email;
+
+    @Column
+    private boolean verified = false;
 
     @Enumerated(EnumType.STRING)
-    Role role;
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
