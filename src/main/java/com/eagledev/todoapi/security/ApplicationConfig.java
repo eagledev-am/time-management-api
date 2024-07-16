@@ -2,7 +2,7 @@ package com.eagledev.todoapi.security;
 
 
 import com.eagledev.todoapi.repos.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,10 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@AllArgsConstructor
 public class ApplicationConfig {
-
-    @Autowired
-    UserRepo repo;
+    private final UserRepo repo;
 
     @Bean
     public AuthenticationProvider getAuthenticationProvider(){
@@ -35,7 +34,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> repo.findUserByUserName(username)
+        return username -> repo.findUserByUserNameOrEmail(username , username)
                 .orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND"));
     }
 

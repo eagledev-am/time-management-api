@@ -1,12 +1,10 @@
 package com.eagledev.todoapi.controlers;
 
-import com.eagledev.todoapi.entities.ListCategory;
-import com.eagledev.todoapi.entities.Task;
 import com.eagledev.todoapi.entities.enums.Status;
 import com.eagledev.todoapi.exceptions.UserException;
 import com.eagledev.todoapi.models.*;
 import com.eagledev.todoapi.repos.UserRepo;
-import com.eagledev.todoapi.services.UserService;
+import com.eagledev.todoapi.services.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +28,7 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity<List<UserDtoRequest>> getAllUsers(){
+    public ResponseEntity<List<UserCreationRequest>> getAllUsers(){
         return new ResponseEntity<>(service.getAllUsers() , HttpStatus.OK);
     }
 
@@ -44,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDtoRequest> updateUserDetails(@PathVariable long id , @Valid @RequestBody UserDtoRequest userDtoRequest){
+    public ResponseEntity<UserCreationRequest> updateUserDetails(@PathVariable long id , @Valid @RequestBody UserCreationRequest userDtoRequest){
         if(id <= 0){
             throw new UserException("Bad request" , HttpStatus.BAD_REQUEST.value());
         }

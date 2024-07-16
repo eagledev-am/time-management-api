@@ -1,8 +1,6 @@
 package com.eagledev.todoapi.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +31,7 @@ public class ListCategory {
     List<Task> tasks;
 
     @JsonIgnore
-    @ManyToOne(optional = false , cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false , cascade = CascadeType.PERSIST , fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id" , referencedColumnName = "id")
     User user;
 }

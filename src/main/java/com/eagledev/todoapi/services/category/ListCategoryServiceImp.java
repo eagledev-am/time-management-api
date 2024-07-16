@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.services.ServiceImp;
+package com.eagledev.todoapi.services.category;
 
 import com.eagledev.todoapi.entities.ListCategory;
 import com.eagledev.todoapi.entities.Task;
@@ -7,7 +7,6 @@ import com.eagledev.todoapi.models.ListCategoryDto;
 import com.eagledev.todoapi.models.TaskDto;
 import com.eagledev.todoapi.models.TaskDtoData;
 import com.eagledev.todoapi.repos.ListCategoryRepo;
-import com.eagledev.todoapi.services.ListCategoryService;
 import com.eagledev.todoapi.services.mappers.ListCategoryMapper;
 import com.eagledev.todoapi.services.mappers.TaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;

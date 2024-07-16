@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.services;
+package com.eagledev.todoapi.services.user;
 
 import com.eagledev.todoapi.entities.enums.Status;
 import com.eagledev.todoapi.models.*;

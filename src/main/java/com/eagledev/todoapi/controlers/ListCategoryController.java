@@ -4,7 +4,7 @@ import com.eagledev.todoapi.exceptions.ListCategoryException;
 import com.eagledev.todoapi.models.ListCategoryDto;
 import com.eagledev.todoapi.models.TaskDto;
 import com.eagledev.todoapi.models.TaskDtoData;
-import com.eagledev.todoapi.services.ListCategoryService;
+import com.eagledev.todoapi.services.category.ListCategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

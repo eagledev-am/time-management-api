@@ -3,7 +3,7 @@ package com.eagledev.todoapi.controlers;
 import com.eagledev.todoapi.exceptions.TaskException;
 import com.eagledev.todoapi.models.TaskDto;
 import com.eagledev.todoapi.models.TaskDtoData;
-import com.eagledev.todoapi.services.TaskService;
+import com.eagledev.todoapi.services.task.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

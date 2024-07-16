@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.services.ServiceImp;
+package com.eagledev.todoapi.services.user;
 
 import com.eagledev.todoapi.entities.ListCategory;
 import com.eagledev.todoapi.entities.User;
@@ -7,7 +7,6 @@ import com.eagledev.todoapi.exceptions.UserException;
 import com.eagledev.todoapi.models.*;
 import com.eagledev.todoapi.repos.ListCategoryRepo;
 import com.eagledev.todoapi.repos.UserRepo;
-import com.eagledev.todoapi.services.UserService;
 import com.eagledev.todoapi.services.mappers.ListCategoryMapper;
 import com.eagledev.todoapi.services.mappers.TaskMapper;
 import com.eagledev.todoapi.services.mappers.UserMapper;

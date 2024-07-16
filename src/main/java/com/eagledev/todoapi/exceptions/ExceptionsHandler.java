@@ -3,7 +3,9 @@ package com.eagledev.todoapi.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -42,11 +44,11 @@ public class ExceptionsHandler {
         ErrorMessage errorMessage = ErrorMessage.builder()
                 .message(e.getMessage())
                 .timestamp(new Date())
-                .statusCode(HttpStatus.FORBIDDEN.value())
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
                 .description(request.getDescription(false))
                 .build();
 
-        return new ResponseEntity<>(errorMessage , HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(errorMessage , HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(TaskException.class)
@@ -61,8 +63,42 @@ public class ExceptionsHandler {
         return new ResponseEntity<>(errorMessage , HttpStatusCode.valueOf(e.getStatusCode()));
     }
 
+    @ExceptionHandler(VerificationException.class)
+    public ResponseEntity<ErrorMessage> verificationEx(VerificationException exception , WebRequest request){
+        ErrorMessage errorMessage = ErrorMessage.builder()
+                .message(exception.getMessage())
+                .timestamp(new Date())
+                .statusCode(exception.getStatusCode())
+                .description(request.getDescription(false))
+                .build();
+        return new ResponseEntity<>(errorMessage , HttpStatusCode.valueOf(exception.getStatusCode()));
+    }
+
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorMessage> authenticationExc(AuthenticationException exception , WebRequest request){
+        ErrorMessage errorMessage = ErrorMessage.builder()
+                .message(exception.getMessage())
+                .timestamp(new Date())
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .description(request.getDescription(false))
+                .build();
+        return new ResponseEntity<>(errorMessage , HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ErrorResponseException.class)
+    public ResponseEntity<ErrorMessage> errorResponse(ErrorResponseException exception , WebRequest request){
+        ErrorMessage errorMessage = ErrorMessage.builder()
+                .message(exception.getMessage())
+                .timestamp(new Date())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .description(request.getDescription(false))
+                .build();
+        return new ResponseEntity<>(errorMessage , HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorMessage> global(Exception exception , WebRequest request){
+    public ResponseEntity<ErrorMessage> global(RuntimeException exception , WebRequest request){
         ErrorMessage errorMessage = ErrorMessage.builder()
                 .message(exception.getMessage())
                 .timestamp(new Date())

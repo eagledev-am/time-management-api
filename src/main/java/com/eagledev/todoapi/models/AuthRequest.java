@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class AuthRequest {
 
     @NotBlank(message = "please enter a valid username")
-    String username;
+    String usernameOrEmail;
 
     @NotBlank(message = "please enter a valid password")
     String password;

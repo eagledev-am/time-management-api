@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<User , Long> {
 
-    Optional<User> findUserByUserName(String username);
+    Optional<User> findUserByUserNameOrEmail(String username , String email);
     @Query(value = "select l from ListCategory l where l.user.id = :id")
     List<ListCategory> getAllCategories(long id);
 

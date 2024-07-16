@@ -19,14 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class UserDto {
-
     long id;
-
     String userName;
-
-    String password;
-
-    Role role;
-
+    String email;
     List<ListCategory> categories;
 }

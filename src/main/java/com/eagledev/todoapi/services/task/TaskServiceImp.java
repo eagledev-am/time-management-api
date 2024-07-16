@@ -1,12 +1,10 @@
-package com.eagledev.todoapi.services.ServiceImp;
+package com.eagledev.todoapi.services.task;
 
 import com.eagledev.todoapi.entities.Task;
-import com.eagledev.todoapi.entities.User;
 import com.eagledev.todoapi.exceptions.TaskException;
 import com.eagledev.todoapi.models.TaskDto;
 import com.eagledev.todoapi.models.TaskDtoData;
 import com.eagledev.todoapi.repos.TaskRepo;
-import com.eagledev.todoapi.services.TaskService;
 import com.eagledev.todoapi.services.mappers.TaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

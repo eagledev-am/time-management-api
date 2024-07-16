@@ -1,10 +1,7 @@
-package com.eagledev.todoapi.services;
+package com.eagledev.todoapi.services.task;
 
-import com.eagledev.todoapi.entities.Task;
 import com.eagledev.todoapi.models.TaskDto;
 import com.eagledev.todoapi.models.TaskDtoData;
-
-import java.util.List;
 
 public interface TaskService {
 

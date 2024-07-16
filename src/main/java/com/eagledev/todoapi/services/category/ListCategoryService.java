@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.services;
+package com.eagledev.todoapi.services.category;
 
 
 import com.eagledev.todoapi.models.ListCategoryDto;

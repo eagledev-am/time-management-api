@@ -94,6 +94,14 @@
             <version>1.5.4.Final</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
