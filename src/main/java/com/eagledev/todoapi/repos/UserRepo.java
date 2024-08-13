@@ -11,8 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<User , Long> {
-
     Optional<User> findUserByUserNameOrEmail(String username , String email);
+
+    boolean existsUserByUserName(String username);
+
+    boolean existsUserByEmail(String email);
+
     @Query(value = "select l from ListCategory l where l.user.id = :id")
     List<ListCategory> getAllCategories(long id);
 
