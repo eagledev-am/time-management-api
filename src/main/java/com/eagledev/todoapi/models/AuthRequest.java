@@ -1,6 +1,7 @@
 package com.eagledev.todoapi.models;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +12,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class AuthRequest {
-
-    @NotBlank(message = "please enter a valid username")
+    @NotNull(message = "please enter a valid username")
     String usernameOrEmail;
 
-    @NotBlank(message = "please enter a valid password")
+    @NotNull(message = "please enter a valid password")
     String password;
 }

@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Objects;
 
-@RequestMapping("/api/auth")
+@RequestMapping(path = "/api/auth" , produces = "application/json")
 @RestController
 @AllArgsConstructor
 public class AuthController {
@@ -28,29 +28,25 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<Response<?>> register(@Valid @RequestBody UserCreationRequest userDtoRequest , BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
-        return new ResponseEntity<>(new Response<>(200 , service.registerUser(userDtoRequest) , null ) , HttpStatus.OK);
+    ResponseEntity<?> register(@Valid @RequestBody UserCreationRequest userDtoRequest){
+        Response<String> response = new Response<>("success" , service.registerUser(userDtoRequest) , null , null );
+        return new ResponseEntity<>(response , HttpStatus.CREATED);
     }
 
     @PostMapping("/verify")
-    ResponseEntity<Response<?>> verify(@RequestParam String code , @RequestParam String userNameOrEmail){
-
-        return new ResponseEntity<>(new Response<>(HttpStatus.OK.value(), service.verifyUser(userNameOrEmail , code) , null) , HttpStatus.OK);
+    ResponseEntity<?> verify(@RequestParam String code , @RequestParam String userNameOrEmail){
+        Response<String> response = new Response<>("success" , service.verifyUser(userNameOrEmail , code) , null , null );
+        return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
     @PostMapping("/resend")
-    ResponseEntity<Response<?>> resend(@RequestParam String userNameOrEmail){
-        return new ResponseEntity<>(new Response<>(HttpStatus.OK.value(), service.resendCode(userNameOrEmail) , null) , HttpStatus.OK);
+    ResponseEntity<Response<String>> resend(@RequestParam String userNameOrEmail){
+        Response<String> response = new Response<>("success" , service.resendCode(userNameOrEmail) , null , null);
+        return new ResponseEntity<>(response ,  HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    ResponseEntity<JwtResponse> login(@Valid @RequestBody AuthRequest authRequest , BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
-        }
+    ResponseEntity<JwtResponse> login(@Valid @RequestBody AuthRequest authRequest){
         return new ResponseEntity<>(service.authenticate(authRequest) , HttpStatus.OK);
     }
 }

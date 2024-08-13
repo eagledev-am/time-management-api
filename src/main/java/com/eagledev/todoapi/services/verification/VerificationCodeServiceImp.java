@@ -36,6 +36,13 @@ public class VerificationCodeServiceImp implements VerificationCodeService {
                 && verificationCode.getExpiryDate().isAfter(Instant.now());
     }
 
+    @Override
+    public void delete(String code) {
+        VerificationCode verificationCode = repo.findVerificationCodeByCode(code)
+                .orElseThrow(() -> new VerificationException("Invalid verification code !"));
+        repo.delete(verificationCode);
+    }
+
     private String generateVerificationCode(){
         Random random = new Random();
         int code = 100000 + random.nextInt(900000); // generate a random 6-digit number

@@ -1,9 +1,7 @@
 package com.eagledev.todoapi.models;
 
 
-import com.eagledev.todoapi.entities.enums.Role;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +14,20 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserCreationRequest {
 
-    @NotNull(message = "The field USERNAME is required !")
+    @NotNull(message = "First name is required")
+    @Size(message = "size should greater than 2 and less than 50" , min = 2 , max = 50)
+    @Pattern(regexp = "^[a-zA-Z-\\s]+$", message = "Last name can only contain letters, spaces, hyphens, and apostrophes")
+    String firstName;
+
+    @NotNull(message = "Last name  is required")
+    @Size(message = "size should greater than 2 and less than 50" , min = 2 , max = 50)
+    @Pattern(regexp = "^[a-zA-Z-\\s]+$", message = "Last name can only contain letters, spaces, hyphens, and apostrophes")
+    String lastName;
+
+    @Size(max = 1000, message = "Bio must not exceed 1000 characters")
+    String bio;
+
+    @NotNull(message = "username is required")
     @Size(max = 20 , message = "user handle length must be less than 20")
     String userName;
 
@@ -30,6 +41,4 @@ public class UserCreationRequest {
     @NotNull(message = "Email field is required !")
     String email;
 
-    @Enumerated(EnumType.STRING)
-    Role role;
 }

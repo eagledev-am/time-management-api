@@ -17,8 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ListCategoryDto {
-
-
     long id;
 
     @NotNull
