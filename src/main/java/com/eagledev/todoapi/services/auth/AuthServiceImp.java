@@ -3,7 +3,6 @@ package com.eagledev.todoapi.services.auth;
 import com.eagledev.todoapi.entities.User;
 import com.eagledev.todoapi.entities.enums.Role;
 import com.eagledev.todoapi.exceptions.UserException;
-import com.eagledev.todoapi.exceptions.VerificationException;
 import com.eagledev.todoapi.models.AuthRequest;
 import com.eagledev.todoapi.models.JwtResponse;
 import com.eagledev.todoapi.models.UserCreationRequest;
@@ -11,7 +10,6 @@ import com.eagledev.todoapi.repos.UserRepo;
 import com.eagledev.todoapi.security.JwtService;
 import com.eagledev.todoapi.services.email.EmailService;
 import com.eagledev.todoapi.services.verification.VerificationCodeService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.coyote.BadRequestException;
@@ -51,7 +49,6 @@ public class AuthServiceImp implements AuthService {
         User user = User.builder()
                 .firstName(userDtoRequest.getFirstName())
                 .lastName(userDtoRequest.getLastName())
-                .bio(userDtoRequest.getBio())
                 .userName(userDtoRequest.getUserName())
                 .password(passwordEncoder.encode(userDtoRequest.getPassword()))
                 .email(userDtoRequest.getEmail())
@@ -62,33 +59,19 @@ public class AuthServiceImp implements AuthService {
                 .build();
         userRepo.save(user);
         String verificationCode = verificationCodeService.generateVerificationCode(user);
-        String VERIFICATION_EMAIL =   "<div style='font-family: Arial, sans-serif; width: 80%; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;'>"
-                + "<div style='text-align: center; padding: 10px; background-color: #f8f8f8; border-bottom: 1px solid #ddd;'>"
-                + "<h1>Welcome to TODO</h1>"
-                + "</div>"
-                + "<div style='padding: 20px;'>"
-                + "<p>Dear, "+ user.getUsername() +"</p>"
-                + "<p>Thank you for registering at ToDo. Please use one time code to verify your email:</p>"
-                + "<p>"+verificationCode+"</p>"
-                + "<p>If you did not register at ToDo, please ignore this email.</p>"
-                + "<p>Best Regards,</p>"
-                + "</div>"
-                + "</div>";
-        emailService.send(user.getEmail(),"Verification Email", VERIFICATION_EMAIL);
+        sendEmail(user , verificationCode);
         return "Registration successful. Please check your email for verification Code.";
     }
 
+    @SneakyThrows
     @Override
     public String verifyUser(String userNameOrEmail , String code) {
         User user = userRepo.findUserByUserNameOrEmail(userNameOrEmail , userNameOrEmail)
                 .orElseThrow(() -> new UserException("USER IS NOT FOUND"));
         if(user.isVerified()){
-            throw new VerificationException("USER IS ALREADY VERIFIED !");
+            throw new BadRequestException("USER IS ALREADY VERIFIED !");
         }
-
-        if(!verificationCodeService.validateVerificationCode(code , user.getUsername())){
-            throw new VerificationException("Invalid verification code");
-        };
+        verificationCodeService.validateVerificationCode(code , userNameOrEmail);
         user.setVerified(true);
         userRepo.save(user);
         verificationCodeService.delete(code);
@@ -97,24 +80,24 @@ public class AuthServiceImp implements AuthService {
 
     @Transactional
     @Override
-    public String resendCode(String userNameOrEmail) {
+    public String sendVerificationCode(String userNameOrEmail) {
         User user = userRepo.findUserByUserNameOrEmail(userNameOrEmail, userNameOrEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("USER IS NOT FOUND"));
+                .orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND"));
         String verificationCode = verificationCodeService.generateVerificationCode(user);
-        String VERIFICATION_EMAIL =   "<div style='font-family: Arial, sans-serif; width: 80%; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;'>"
-                + "<div style='text-align: center; padding: 10px; background-color: #f8f8f8; border-bottom: 1px solid #ddd;'>"
-                + "<h1>Welcome to XJudge</h1>"
-                + "</div>"
-                + "<div style='padding: 20px;'>"
-                + "<p>Dear, {0}</p>"
-                + "<p>Thank you for registering at ToDo. Please use one time code to verify your email:</p>"
-                + "<p>{1}</p>"
-                + "<p>If you did not register at ToDo, please ignore this email.</p>"
-                + "<p>Best Regards,</p>"
-                + "</div>"
-                + "</div>";
-        emailService.send(user.getEmail(),"Verification Email", MessageFormat.format(VERIFICATION_EMAIL , user.getUsername() , verificationCode) );
-        return "Confirmation successful. Please check your email for verification Code.";
+        sendEmail(user , verificationCode);
+        return "Verification Email. Please check your email for verification Code.";
+    }
+
+    @SneakyThrows
+    @Override
+    public String resetPassword(String userNameOrEmail, String code ,String newPassword) {
+        User user = userRepo.findUserByUserNameOrEmail(userNameOrEmail, userNameOrEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND"));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        verificationCodeService.validateVerificationCode(code , userNameOrEmail);
+        verificationCodeService.delete(code);
+        userRepo.save(user);
+        return "password reset successfully";
     }
 
     @Override
@@ -133,4 +116,24 @@ public class AuthServiceImp implements AuthService {
                 .build();
     }
 
+    @Override
+    public boolean verifyCode(String code, String email) {
+        return verificationCodeService.validateVerificationCode(code , email);
+    }
+
+    private void sendEmail(User user , String verificationCode){
+        String VERIFICATION_EMAIL =   "<div style='font-family: Arial, sans-serif; width: 80%; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;'>"
+                + "<div style='text-align: center; padding: 10px; background-color: #f8f8f8; border-bottom: 1px solid #ddd;'>"
+                + "<h1>Welcome to TODO</h1>"
+                + "</div>"
+                + "<div style='padding: 20px;'>"
+                + "<p>Dear, {0}</p>"
+                + "<p>Thank you for registering at ToDo. Please use one time code to verify your email:</p>"
+                + "<p>{1}</p>"
+                + "<p>If you did not register at ToDo, please ignore this email.</p>"
+                + "<p>Best Regards,</p>"
+                + "</div>"
+                + "</div>";
+        emailService.send(user.getEmail(),"Verification Email", MessageFormat.format(VERIFICATION_EMAIL , user.getUsername() , verificationCode) );
+    }
 }

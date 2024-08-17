@@ -45,9 +45,6 @@ public class User implements UserDetails {
 
     private String profilePictureUrl;
 
-    @Column(length = 1000)
-    String bio;
-
     @Column
     private boolean verified = false;
 

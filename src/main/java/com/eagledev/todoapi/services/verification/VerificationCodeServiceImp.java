@@ -2,9 +2,10 @@ package com.eagledev.todoapi.services.verification;
 
 import com.eagledev.todoapi.entities.User;
 import com.eagledev.todoapi.entities.VerificationCode;
-import com.eagledev.todoapi.exceptions.VerificationException;
 import com.eagledev.todoapi.repos.VerificationCodeRepo;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -27,19 +28,25 @@ public class VerificationCodeServiceImp implements VerificationCodeService {
         return verificationCode;
     }
 
+    @SneakyThrows
     @Override
-    public Boolean validateVerificationCode(String code , String userName) {
+    public Boolean validateVerificationCode(String code , String userNameOrEmail) {
         VerificationCode verificationCode = repo.findVerificationCodeByCode(code)
-                .orElseThrow(() -> new VerificationException("Invalid verification code !"));
+                .orElseThrow(() -> new BadRequestException("Invalid verification code !"));
         User userToVerify = verificationCode.getUser();
-        return userName.equals(userToVerify.getUsername())
-                && verificationCode.getExpiryDate().isAfter(Instant.now());
+        if(!verificationCode.getExpiryDate().isAfter(Instant.now())){
+            throw new BadRequestException("Code is expired");
+        }
+        if(!(userNameOrEmail.equals(userToVerify.getUsername()) || userNameOrEmail.equals(userToVerify.getEmail()))){
+            throw new BadRequestException("UNAUTHORIZED");
+        }
+        return true;
     }
 
     @Override
-    public void delete(String code) {
+    public void delete(String code) throws BadRequestException {
         VerificationCode verificationCode = repo.findVerificationCodeByCode(code)
-                .orElseThrow(() -> new VerificationException("Invalid verification code !"));
+                .orElseThrow(() -> new BadRequestException("Invalid verification code !"));
         repo.delete(verificationCode);
     }
 

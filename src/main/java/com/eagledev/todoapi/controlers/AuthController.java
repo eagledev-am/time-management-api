@@ -1,20 +1,16 @@
 package com.eagledev.todoapi.controlers;
 
+import com.eagledev.todoapi.models.*;
 import com.eagledev.todoapi.models.AuthRequest;
 import com.eagledev.todoapi.models.JwtResponse;
-import com.eagledev.todoapi.models.Response;
 import com.eagledev.todoapi.models.UserCreationRequest;
+import com.eagledev.todoapi.models.auth.PasswordResetPassword;
 import com.eagledev.todoapi.services.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Objects;
 
 @RequestMapping(path = "/api/auth" , produces = "application/json")
 @RestController
@@ -33,15 +29,27 @@ public class AuthController {
         return new ResponseEntity<>(response , HttpStatus.CREATED);
     }
 
-    @PostMapping("/verify")
+    @PostMapping("/verify-user")
     ResponseEntity<?> verify(@RequestParam String code , @RequestParam String userNameOrEmail){
         Response<String> response = new Response<>("success" , service.verifyUser(userNameOrEmail , code) , null , null );
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
-    @PostMapping("/resend")
-    ResponseEntity<Response<String>> resend(@RequestParam String userNameOrEmail){
-        Response<String> response = new Response<>("success" , service.resendCode(userNameOrEmail) , null , null);
+    @PostMapping(path = { "/resend-code"  , "/forget-password"})
+    ResponseEntity<Response<String>> sendVerificationCode(@RequestParam String userNameOrEmail){
+        Response<String> response = new Response<>("success" , service.sendVerificationCode(userNameOrEmail) , null , null);
+        return new ResponseEntity<>(response ,  HttpStatus.OK);
+    }
+
+    @PostMapping("/verify-code")
+    ResponseEntity<Boolean> verifyCode(@RequestParam String code , @RequestParam String email){
+        return new ResponseEntity<>(service.verifyCode(code , email) , HttpStatus.OK);
+    }
+
+
+    @PutMapping("/reset-password")
+    ResponseEntity<Response<String>> resetPassword(@Valid @RequestBody PasswordResetPassword resetPassword){
+        Response<String> response = new Response<>("success" , service.resetPassword(resetPassword.getEmailOrUserName(), resetPassword.getCode() , resetPassword.getNewPassword()) , null , null);
         return new ResponseEntity<>(response ,  HttpStatus.OK);
     }
 
