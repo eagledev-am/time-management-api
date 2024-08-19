@@ -45,7 +45,7 @@ public class FileServiceImp implements FileService{
     }
 
     @Override
-    public Resource download(String fileName) throws FileNotFoundException, MalformedURLException {
+    public Resource loadFile(String fileName) throws FileNotFoundException, MalformedURLException {
         Path path = Path.of(fileName);
         if(!Files.exists(path)){
             throw new FileNotFoundException("file with this path " + fileName + "not found");

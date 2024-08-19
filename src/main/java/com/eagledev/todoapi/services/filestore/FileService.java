@@ -9,5 +9,5 @@ import java.net.MalformedURLException;
 
 public interface FileService {
     String uploadFile(String uploadPath , MultipartFile file) throws IOException;
-    Resource download(String filename) throws FileNotFoundException, MalformedURLException;
+    Resource loadFile(String filename) throws FileNotFoundException, MalformedURLException;
 }

@@ -1,10 +1,11 @@
 package com.eagledev.todoapi.services.mappers;
 
 import com.eagledev.todoapi.entities.User;
-import com.eagledev.todoapi.models.UserCreationRequest;
+import com.eagledev.todoapi.models.user.UserModel;
 import org.mapstruct.Mapper;
+
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    UserCreationRequest toDto(User user);
+    UserModel toModel(User user);
 }

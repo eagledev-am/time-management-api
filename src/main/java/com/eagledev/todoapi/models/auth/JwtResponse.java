@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.models;
+package com.eagledev.todoapi.models.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

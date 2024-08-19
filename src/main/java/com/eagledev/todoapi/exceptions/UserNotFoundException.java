@@ -5,15 +5,15 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserException extends RuntimeException{
+public class UserNotFoundException extends RuntimeException{
     private int statusCode;
     public static String USER_NOT_FOUND = "USER_NOT_FOUND";
 
-    public UserException(String message){
+    public UserNotFoundException(String message){
         super(message);
     }
 
-    public UserException(String message , int statusCode){
+    public UserNotFoundException(String message , int statusCode){
         super(message);
         this.statusCode = statusCode;
     }

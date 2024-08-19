@@ -1,28 +1,15 @@
 package com.eagledev.todoapi.repos;
 
-import com.eagledev.todoapi.entities.ListCategory;
-import com.eagledev.todoapi.entities.Task;
 import com.eagledev.todoapi.entities.User;
-import com.eagledev.todoapi.entities.enums.Status;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepo extends JpaRepository<User , Long> {
     Optional<User> findUserByUserNameOrEmail(String username , String email);
-
     boolean existsUserByUserName(String username);
-
     boolean existsUserByEmail(String email);
-
-    @Query(value = "select l from ListCategory l where l.user.id = :id")
-    List<ListCategory> getAllCategories(long id);
-
-    @Query(value = "select t  from Task t where t.user.id = :id ")
-    List<Task> getAllTasks(long id);
-
-    @Query(value = "select t  from Task t where t.user.id = :id and t.status = :status ")
-    List<Task> getAllTasksByStatus(long id , Status status);
+    Optional<User> findUserByEmail(String email);
+    Optional<User> findUserByUuid(UUID uuid);
+    Optional<User> findUserByUserName(String userName);
 }

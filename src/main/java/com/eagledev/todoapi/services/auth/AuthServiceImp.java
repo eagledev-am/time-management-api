@@ -2,10 +2,10 @@ package com.eagledev.todoapi.services.auth;
 
 import com.eagledev.todoapi.entities.User;
 import com.eagledev.todoapi.entities.enums.Role;
-import com.eagledev.todoapi.exceptions.UserException;
-import com.eagledev.todoapi.models.AuthRequest;
-import com.eagledev.todoapi.models.JwtResponse;
-import com.eagledev.todoapi.models.UserCreationRequest;
+import com.eagledev.todoapi.exceptions.UserNotFoundException;
+import com.eagledev.todoapi.models.auth.AuthRequest;
+import com.eagledev.todoapi.models.auth.JwtResponse;
+import com.eagledev.todoapi.models.user.UserCreationRequest;
 import com.eagledev.todoapi.repos.UserRepo;
 import com.eagledev.todoapi.security.JwtService;
 import com.eagledev.todoapi.services.email.EmailService;
@@ -67,7 +67,7 @@ public class AuthServiceImp implements AuthService {
     @Override
     public String verifyUser(String userNameOrEmail , String code) {
         User user = userRepo.findUserByUserNameOrEmail(userNameOrEmail , userNameOrEmail)
-                .orElseThrow(() -> new UserException("USER IS NOT FOUND"));
+                .orElseThrow(() -> new UserNotFoundException("USER IS NOT FOUND"));
         if(user.isVerified()){
             throw new BadRequestException("USER IS ALREADY VERIFIED !");
         }
@@ -108,7 +108,7 @@ public class AuthServiceImp implements AuthService {
         User user = userRepo.findUserByUserNameOrEmail(request.getUsernameOrEmail() , request.getUsernameOrEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("USER IS NOT FOUND"));
         if(!user.isVerified()){
-            throw new UserException("User is not verified" , HttpStatus.FORBIDDEN.value());
+            throw new UserNotFoundException("User is not verified" , HttpStatus.FORBIDDEN.value());
         }
         return JwtResponse
                 .builder()
