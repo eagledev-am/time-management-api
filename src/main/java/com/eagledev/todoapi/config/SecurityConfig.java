@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.security;
+package com.eagledev.todoapi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +30,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
         security.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(config ->
-                        config.requestMatchers("api/auth/**")
+                        config.requestMatchers("api/auth/**" , "api-docs/**" , "swagger-ui/**")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET , "api/users/**")
                                 .permitAll()

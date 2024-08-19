@@ -1,8 +1,6 @@
-package com.eagledev.todoapi.security;
+package com.eagledev.todoapi.config;
 
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

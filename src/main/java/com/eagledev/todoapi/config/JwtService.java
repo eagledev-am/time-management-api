@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.security;
+package com.eagledev.todoapi.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

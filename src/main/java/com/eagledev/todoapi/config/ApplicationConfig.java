@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.security;
+package com.eagledev.todoapi.config;
 
 
 import com.eagledev.todoapi.repos.UserRepo;
