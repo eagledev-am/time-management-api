@@ -1,8 +1,8 @@
 package com.eagledev.todoapi.controlers;
 
 import com.eagledev.todoapi.models.*;
-import com.eagledev.todoapi.models.AuthRequest;
-import com.eagledev.todoapi.models.JwtResponse;
+import com.eagledev.todoapi.models.auth.AuthRequest;
+import com.eagledev.todoapi.models.auth.JwtResponse;
 import com.eagledev.todoapi.models.UserCreationRequest;
 import com.eagledev.todoapi.models.auth.PasswordResetPassword;
 import com.eagledev.todoapi.services.auth.AuthService;
