@@ -7,7 +7,7 @@ import com.eagledev.todoapi.models.auth.AuthRequest;
 import com.eagledev.todoapi.models.auth.JwtResponse;
 import com.eagledev.todoapi.models.user.UserCreationRequest;
 import com.eagledev.todoapi.repos.UserRepo;
-import com.eagledev.todoapi.security.JwtService;
+import com.eagledev.todoapi.config.JwtService;
 import com.eagledev.todoapi.services.email.EmailService;
 import com.eagledev.todoapi.services.verification.VerificationCodeService;
 import lombok.RequiredArgsConstructor;
