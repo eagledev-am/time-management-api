@@ -2,36 +2,43 @@ package com.eagledev.todoapi.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Setter
+@Getter
 public class ListCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private int id;
 
     @Column(nullable = false)
-    String name;
-
-    @Column(nullable = false)
-    String category;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
-    String description;
+    private String description;
 
+    private LocalDateTime creationDate;
+
+    private LocalDateTime modifiedDate;
+
+    private String avatarUrl;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "list" , cascade = CascadeType.ALL)
-    List<Task> tasks;
+    private List<Task> tasks;
 
-    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(optional = false , cascade = CascadeType.PERSIST , fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id" , referencedColumnName = "id")
-    User user;
+    @JoinColumn(name = "user_id")
+    private User user;
 }
