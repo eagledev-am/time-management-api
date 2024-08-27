@@ -3,23 +3,22 @@ package com.eagledev.todoapi.entities;
 import com.eagledev.todoapi.entities.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Setter
 @Getter
 @Builder
-@Table(name = "users")
+@Table(name = "user")
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -27,7 +26,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Column(unique = true , nullable = false , updatable = false )
     @UuidGenerator(style = UuidGenerator.Style.RANDOM)
@@ -58,6 +57,11 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL )
+    private Set<ProjectTeam> project_members;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
