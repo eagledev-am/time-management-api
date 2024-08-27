@@ -4,46 +4,77 @@ import com.eagledev.todoapi.entities.enums.Status;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString
 public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private int id;
 
-    String title;
+    private String title;
 
     @Column(columnDefinition = "TEXT")
-    String description;
+    private String description;
 
     @Enumerated(EnumType.STRING)
-    Status status;
+    private Status status;
 
     @Column(updatable = false)
-    Date creationDate;
+    private LocalDateTime creationDate;
 
-    Date dueDate;
+    private LocalDateTime dueDate;
 
-    @JsonIgnore
-    @ManyToOne(optional = false)
-    @JoinColumn( name = "list_id" , referencedColumnName = "id" , updatable = false)
-    ListCategory list;
-
-    @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne
-    @JoinColumn(name = "user_id" , referencedColumnName = "id" , updatable = false , nullable = false)
-    User user;
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne
+    @JoinColumn(name = "list_id")
+    private ListCategory list;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.REMOVE})
+    @JoinColumn(name = "task_id")
+    private Set<Comment> comments;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.REMOVE})
+    @JoinColumn(name = "task_id")
+    private Set<Attachment> attachments;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.REMOVE})
+    @JoinColumn(name = "task_id")
+    private Set<Tag> tags;
+
+
+
 }
