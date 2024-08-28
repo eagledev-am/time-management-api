@@ -38,4 +38,12 @@ public class Project {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL )
     private Set<ProjectTeam> project_members;
+
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany
+    @JoinColumn(name = "project_id")
+    private Set<Attachment> attachments;
+
 }

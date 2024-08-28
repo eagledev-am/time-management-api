@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class ListCategoryServiceImp implements ListCategoryService {
     public TaskDtoData addTaskToList(long id , TaskDto dto) {
         ListCategory category = repo.findById(id)
                 .orElseThrow(()-> new ListCategoryException(ListCategoryException.LIST_CATEGORY_NOT_FOUND , HttpStatus.NOT_FOUND.value()));
-        dto.setCreationDate(new Date());
+        dto.setCreationDate(LocalDateTime.now());
         Task task = taskMapper.toEntity(dto);
         task.setList(category);
         task.setUser(category.getUser());
@@ -68,7 +69,7 @@ public class ListCategoryServiceImp implements ListCategoryService {
                 .description(task.getDescription())
                 .title(task.getTitle())
                 .dueDate(task.getDueDate())
-                .listCategory(task.getList().getCategory())
+                .listCategory(task.getList().getTitle())
                 .creationDate(task.getCreationDate())
                 .status(task.getStatus())
                 .build();
