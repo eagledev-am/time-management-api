@@ -34,10 +34,16 @@ public class UserServiceImp implements UserService {
     private final FileService fileService;
 
     @Override
-    public UserModel getUserById(UUID id) {
+    public UserModel getUserForClientById(UUID id) {
         User user = findUserById(id);
         return userMapper.toModel(user);
     }
+
+    @Override
+    public User getUserById(UUID id) {
+        return findUserById(id);
+    }
+
 
     @Override
     public List<UserModel> getUsers() {

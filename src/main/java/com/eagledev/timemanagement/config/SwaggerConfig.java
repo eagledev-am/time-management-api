@@ -30,7 +30,7 @@ public class SwaggerConfig {
         Info information = new Info()
                 .title("Time Management System API")
                 .version("1.0")
-                .description("This API exposes endpoints to manage employees.")
+                .description("This API exposes endpoints to manage your time.")
                 .contact(myContact);
         return new OpenAPI().info(information).servers(List.of(server));
     }

@@ -34,7 +34,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Response<UserModel>> getUserById(@PathVariable UUID id){
-        Response<UserModel> response = new Response<>("success" , "",userService.getUserById(id) , null);
+        Response<UserModel> response = new Response<>("success" , "",userService.getUserForClientById(id) , null);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 

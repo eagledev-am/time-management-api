@@ -3,25 +3,27 @@ package com.eagledev.todoapi.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
-import java.util.Date;
-
 @Entity
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 @Builder
-public class VerificationCode {
+public class Attachment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String code;
+    private String filename;
 
-    private Instant expiryDate;
+    private String contentType;
+
+    private String fileUrl;
 
     @ManyToOne
-    @JoinColumn(name = "user_id" , referencedColumnName = "id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JoinColumn(name = "user_id")
     private User user;
 }

@@ -1,5 +1,6 @@
 package com.eagledev.todoapi.services.user;
 
+import com.eagledev.todoapi.entities.User;
 import com.eagledev.todoapi.models.user.ChangePasswordModel;
 import com.eagledev.todoapi.models.user.UserModel;
 import org.apache.coyote.BadRequestException;
@@ -12,7 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-    UserModel getUserById(UUID id);
+    UserModel getUserForClientById(UUID id);
+    User getUserById(UUID id);
     List<UserModel> getUsers();
     void removeUser(UUID id);
     String uploadProfilePicture(Authentication authentication, MultipartFile file) throws IOException;

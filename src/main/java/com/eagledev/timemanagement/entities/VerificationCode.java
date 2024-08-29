@@ -3,25 +3,25 @@ package com.eagledev.todoapi.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.Date;
 
+@Entity
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Setter
-@Getter
-@Entity
-public class Comment {
-
+public class VerificationCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String content;
+    private String code;
 
-    private LocalDateTime createdAt;
+    private Instant expiryDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
 }

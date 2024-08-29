@@ -53,6 +53,11 @@ public class HandlingExceptions {
         return new ResponseEntity<>(getResponse(exception , request , HttpStatus.BAD_REQUEST.value()) , HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UnAuthorizedException.class)
+    public ResponseEntity<?> unAuthorizedExceptionHandler(UnAuthorizedException exception , WebRequest request){
+        return new ResponseEntity<>(getResponse(exception , request , HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> authenticationExceptionHandler(AuthenticationException exception , WebRequest request){
         return new ResponseEntity<>(getResponse(exception , request , HttpStatus.FORBIDDEN.value()) , HttpStatus.FORBIDDEN);
