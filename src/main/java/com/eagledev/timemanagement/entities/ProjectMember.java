@@ -1,6 +1,6 @@
 package com.eagledev.timemanagement.entities;
 
-import com.eagledev.timemanagement.entities.enums.UserProjectRole;
+import com.eagledev.timemanagement.entities.enums.ProjectMemberRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +11,7 @@ import lombok.*;
 @Getter
 @Builder
 @ToString
+@EqualsAndHashCode
 public class ProjectMember {
 
 
@@ -20,7 +21,7 @@ public class ProjectMember {
     private int id;
 
     @Enumerated(EnumType.STRING)
-    private UserProjectRole projectRole;
+    private ProjectMemberRole projectRole;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
