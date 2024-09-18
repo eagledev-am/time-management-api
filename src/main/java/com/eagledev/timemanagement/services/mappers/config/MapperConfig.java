@@ -1,9 +1,8 @@
-package com.eagledev.todoapi.services.mappers.config;
+package com.eagledev.timemanagement.services.mappers.config;
 
-import com.eagledev.todoapi.entities.ListCategory;
-import com.eagledev.todoapi.services.mappers.ListCategoryMapper;
-import com.eagledev.todoapi.services.mappers.TaskMapper;
-import com.eagledev.todoapi.services.mappers.UserMapper;
+import com.eagledev.timemanagement.services.mappers.ListCategoryMapper;
+import com.eagledev.timemanagement.services.mappers.TaskMapper;
+import com.eagledev.timemanagement.services.mappers.UserMapper;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 

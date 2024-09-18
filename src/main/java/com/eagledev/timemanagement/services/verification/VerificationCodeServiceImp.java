@@ -1,8 +1,8 @@
-package com.eagledev.todoapi.services.verification;
+package com.eagledev.timemanagement.services.verification;
 
-import com.eagledev.todoapi.entities.User;
-import com.eagledev.todoapi.entities.VerificationCode;
-import com.eagledev.todoapi.repos.VerificationCodeRepo;
+import com.eagledev.timemanagement.entities.User;
+import com.eagledev.timemanagement.entities.VerificationCode;
+import com.eagledev.timemanagement.repos.VerificationCodeRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.coyote.BadRequestException;

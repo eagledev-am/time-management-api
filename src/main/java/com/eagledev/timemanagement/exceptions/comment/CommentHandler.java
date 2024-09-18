@@ -1,7 +1,7 @@
-package com.eagledev.todoapi.exceptions.comment;
+package com.eagledev.timemanagement.exceptions.comment;
 
-import com.eagledev.todoapi.exceptions.ErrorMessage;
-import com.eagledev.todoapi.models.Response;
+import com.eagledev.timemanagement.exceptions.ErrorMessage;
+import com.eagledev.timemanagement.models.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

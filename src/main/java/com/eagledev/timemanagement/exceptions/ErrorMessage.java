@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.exceptions;
+package com.eagledev.timemanagement.exceptions;
 
 import lombok.Builder;
 import lombok.Getter;

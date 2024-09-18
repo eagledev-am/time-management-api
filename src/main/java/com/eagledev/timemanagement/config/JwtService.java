@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.config;
+package com.eagledev.timemanagement.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

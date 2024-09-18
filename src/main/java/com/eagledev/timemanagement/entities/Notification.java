@@ -1,6 +1,6 @@
-package com.eagledev.todoapi.entities;
+package com.eagledev.timemanagement.entities;
 
-import com.eagledev.todoapi.entities.enums.NotificationStatus;
+import com.eagledev.timemanagement.entities.enums.NotificationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

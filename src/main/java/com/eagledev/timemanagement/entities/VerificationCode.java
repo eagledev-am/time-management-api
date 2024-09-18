@@ -1,10 +1,9 @@
-package com.eagledev.todoapi.entities;
+package com.eagledev.timemanagement.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Setter

@@ -83,4 +83,9 @@ public class AttachmentServiceImp implements AttachmentService{
     public Boolean existsByFileNameAndTaskId(String fileName, int taskId) {
         return attachmentRepo.countByFilenameAndTaskId(fileName , taskId) > 0;
     }
+
+    @Override
+    public Boolean existsByFileNameAndProjectId(String fileName, int projectId) {
+        return attachmentRepo.countByFilenameAndProjectId(fileName , projectId) > 0;
+    }
 }

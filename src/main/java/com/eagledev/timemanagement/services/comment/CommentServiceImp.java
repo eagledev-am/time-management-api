@@ -1,21 +1,24 @@
-package com.eagledev.todoapi.services.comment;
+package com.eagledev.timemanagement.services.comment;
 
-import com.eagledev.todoapi.entities.Comment;
-import com.eagledev.todoapi.entities.Task;
-import com.eagledev.todoapi.entities.User;
-import com.eagledev.todoapi.exceptions.UnAuthorizedException;
-import com.eagledev.todoapi.exceptions.comment.CommentNotFoundException;
-import com.eagledev.todoapi.models.comment.CommentModel;
-import com.eagledev.todoapi.models.comment.CommentRequest;
-import com.eagledev.todoapi.repos.CommentRepo;
-import com.eagledev.todoapi.services.mappers.CommentMapper;
-import com.eagledev.todoapi.services.user.UserService;
+import com.eagledev.timemanagement.entities.Comment;
+import com.eagledev.timemanagement.entities.Task;
+import com.eagledev.timemanagement.entities.User;
+import com.eagledev.timemanagement.exceptions.UnAuthorizedException;
+import com.eagledev.timemanagement.exceptions.comment.CommentNotFoundException;
+import com.eagledev.timemanagement.models.comment.CommentModel;
+import com.eagledev.timemanagement.models.comment.CommentRequest;
+import com.eagledev.timemanagement.repos.CommentRepo;
+import com.eagledev.timemanagement.services.mappers.CommentMapper;
+import com.eagledev.timemanagement.services.security.UserContextService;
+import com.eagledev.timemanagement.services.user.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
 @Service
 @AllArgsConstructor
@@ -23,18 +26,19 @@ public class CommentServiceImp implements CommentService{
     private CommentRepo commentRepo;
     private UserService userService;
     private CommentMapper commentMapper;
+    private UserContextService userContextService;
 
     @Override
-    public Comment createComment(CommentRequest comment) {
+    public CommentModel createComment(CommentRequest comment) {
         User user = userService.getUserById(comment.authorId());
         Comment comment1 = Comment.builder()
                 .content(comment.content())
                 .createdAt(LocalDateTime.now())
-                .comment(null)
+                .replies(new HashSet<>())
                 .user(user)
                 .build();
         commentRepo.save(comment1);
-        return comment1;
+        return commentMapper.toCommentModel(comment1);
     }
 
     @Override
@@ -46,9 +50,10 @@ public class CommentServiceImp implements CommentService{
     public CommentModel updateComment(int id , CommentRequest request) {
         Comment comment = findCommentById(id);
         User author = comment.getUser();
+        User user = userContextService.getCurrentUser();
 
-        if(author.getUsername().equals(getAuthenticatedUser().getUsername())){
-            throw new UnAuthorizedException("Unauthorized access");
+        if(!author.getUsername().equals(user.getUsername())){
+            throw new AccessDeniedException("Unauthorized access");
         }
 
         comment.setContent(request.content());
@@ -61,9 +66,12 @@ public class CommentServiceImp implements CommentService{
     public void deleteComment(int id) {
         Comment comment = findCommentById(id);
         User author = comment.getUser();
-        if(author.getUsername().equals(getAuthenticatedUser().getUsername())){
+        User user = userContextService.getCurrentUser();
+
+        if(author.getUsername().equals(user.getUsername())){
             throw new UnAuthorizedException("Unauthorized access");
         }
+
         commentRepo.delete(comment);
     }
 
@@ -74,10 +82,11 @@ public class CommentServiceImp implements CommentService{
         Comment comment = Comment.builder()
                 .content(request.content())
                 .createdAt(LocalDateTime.now())
-                .comment(parentComment)
+                .replies(new HashSet<>())
                 .user(user)
                 .build();
-        return commentMapper.toCommentModel(commentRepo.save(comment));
+        parentComment.getReplies().add(comment);
+        return commentMapper.toCommentModel(commentRepo.save(parentComment));
     }
 
     private Comment findCommentById(int id) {
@@ -85,7 +94,4 @@ public class CommentServiceImp implements CommentService{
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
     }
 
-    private User getAuthenticatedUser(){
-        return (User)((Principal)SecurityContextHolder.getContext().getAuthentication());
-    }
 }

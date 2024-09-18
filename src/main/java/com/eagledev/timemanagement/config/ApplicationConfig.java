@@ -1,7 +1,7 @@
-package com.eagledev.todoapi.config;
+package com.eagledev.timemanagement.config;
 
 
-import com.eagledev.todoapi.repos.UserRepo;
+import com.eagledev.timemanagement.repos.UserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

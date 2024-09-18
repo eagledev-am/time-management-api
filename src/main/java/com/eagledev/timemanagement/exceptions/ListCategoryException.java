@@ -1,6 +1,5 @@
-package com.eagledev.todoapi.exceptions;
+package com.eagledev.timemanagement.exceptions;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;

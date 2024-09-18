@@ -1,26 +1,12 @@
-package com.eagledev.todoapi.services.mappers;
+package com.eagledev.timemanagement.services.mappers;
 
-import com.eagledev.todoapi.entities.Task;
-import com.eagledev.todoapi.models.task.TaskDto;
+import com.eagledev.timemanagement.entities.Task;
+import com.eagledev.timemanagement.models.task.TaskDto;
+import com.eagledev.timemanagement.models.task.TaskPageDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
-    Task toEntity(TaskDto dto);
-    TaskDto toDto(Task task);
-
-//
-//    @Mappings({
-//            @Mapping(target = "id", source = "id"),
-//            @Mapping(target = "title", source = "title"),
-//            @Mapping(target = "description", source = "description"),
-//            @Mapping(target = "status", source = "status"),
-//            @Mapping(target = "creationDate", source = "creationDate"),
-//            @Mapping(target = "dueDate", source = "dueDate"),
-//            @Mapping(target = "listCategory" , source = "task.list.category")
-//    }
-//    )
-//    TaskDtoData toDtoData(Task task);
-
-
+    TaskDto toModel(Task task);
+    TaskPageDto toPageModel(Task task);
 }

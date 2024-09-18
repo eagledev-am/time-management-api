@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.models.auth;
+package com.eagledev.timemanagement.models.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

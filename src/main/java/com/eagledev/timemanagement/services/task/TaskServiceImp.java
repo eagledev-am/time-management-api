@@ -1,9 +1,6 @@
 package com.eagledev.timemanagement.services.task;
 
-import com.eagledev.timemanagement.entities.Attachment;
-import com.eagledev.timemanagement.entities.Comment;
-import com.eagledev.timemanagement.entities.Task;
-import com.eagledev.timemanagement.entities.User;
+import com.eagledev.timemanagement.entities.*;
 import com.eagledev.timemanagement.entities.enums.Status;
 import com.eagledev.timemanagement.entities.enums.TaskPriority;
 import com.eagledev.timemanagement.exceptions.ResourceNotFound;
@@ -11,6 +8,7 @@ import com.eagledev.timemanagement.exceptions.UnAuthorizedException;
 import com.eagledev.timemanagement.models.comment.CommentModel;
 import com.eagledev.timemanagement.models.comment.CommentRequest;
 import com.eagledev.timemanagement.models.task.TaskDto;
+import com.eagledev.timemanagement.models.task.TaskPageDto;
 import com.eagledev.timemanagement.models.task.TaskRequest;
 import com.eagledev.timemanagement.repos.TaskRepo;
 import com.eagledev.timemanagement.services.attachment.AttachmentService;
@@ -20,6 +18,9 @@ import com.eagledev.timemanagement.services.security.UserContextService;
 import com.eagledev.timemanagement.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,21 +46,17 @@ public class TaskServiceImp implements TaskService {
     private final AttachmentService attachmentService;
 
     @Override
-    public Set<TaskDto> getTasksOfAuthenticatedUser() {
+    public Page<TaskPageDto> getTasksOfAuthenticatedUser(Pageable pageable) {
         User user = userContextService.getCurrentUser();
-        return taskRepo.findAllTasksByOwnerIdOrAssignedUserId(user.getId() , user.getId())
-                .stream()
-                .map(mapper::toModel)
-                .collect(Collectors.toSet());
+        return taskRepo.findAllTasksByOwnerIdOrAssignedUserId(user.getId() , user.getId() , pageable)
+                .map(mapper::toPageModel);
     }
 
     @Override
-    public Set<TaskDto> getDueDate() {
+    public Page<TaskPageDto> getDueDate(Pageable pageable) {
         User user = userContextService.getCurrentUser();
-        return taskRepo.findAllTasksByOwnerIdOrAssignedUserId(user.getId() , user.getId())
-                .stream()
-                .map(mapper::toModel)
-                .collect(Collectors.toSet());
+         return taskRepo.findDueDateTasks(user.getId() , user.getId() ,Instant.now(),pageable)
+                .map(mapper::toPageModel);
     }
 
     @Override
@@ -74,14 +71,6 @@ public class TaskServiceImp implements TaskService {
     @Override
     public TaskDto getTaskByIdClient(int id) {
         Task task = getTaskById(id);
-        User user = userContextService.getCurrentUser();
-
-        if(!task.getOwner().getUsername().equals(user.getUsername())
-        && !(task.getAssignedUser() != null && task.getAssignedUser().getUsername().equals(user.getUsername())))
-        {
-            throw new UnAuthorizedException("UnAuthorized access");
-        }
-
         return mapper.toModel(task);
     }
 
@@ -93,49 +82,45 @@ public class TaskServiceImp implements TaskService {
 
     @Transactional
     @Override
-    public TaskDto createTask(TaskRequest taskRequest) {
+    public TaskDto createTaskClient(TaskRequest taskRequest) {
+        return mapper.toModel(taskRepo.save(createTask(taskRequest)));
+    }
+
+    @Override
+    public Task createTask(TaskRequest taskRequest) {
         User owner = userContextService.getCurrentUser();
-        Task task = Task.builder()
+        return Task.builder()
                 .title(taskRequest.title())
                 .description(taskRequest.description())
                 .dueDate(taskRequest.dueDate())
                 .status(Status.PENDING)
-                .taskPriority(taskRequest.priority() == null? TaskPriority.MEDIUM : taskRequest.priority())
+                .taskPriority(taskRequest.priority() == null? TaskPriority.MEDIUM : TaskPriority.valueOf(taskRequest.priority()))
                 .creationDate(Instant.now())
                 .attachments(new HashSet<>())
                 .comments(new HashSet<>())
                 .owner(owner)
                 .build();
-        return mapper.toModel(taskRepo.save(task));
     }
 
     @Override
     public TaskDto updateTask(int id, TaskRequest taskRequest) {
-        User user = userContextService.getCurrentUser();
         Task task = getTaskById(id);
-
-        if(task.getOwner().getId() != user.getId()){
-            throw new UnAuthorizedException("UnAuthorized access");
-        }
-
         task.setTitle(taskRequest.title());
         task.setDescription(taskRequest.description());
         task.setDueDate(taskRequest.dueDate());
-        task.setTaskPriority(taskRequest.priority());
-
+        task.setTaskPriority(TaskPriority.valueOf(taskRequest.priority()));
         return mapper.toModel(taskRepo.save(task));
     }
 
 
     @Override
     public void deleteTask(int id) {
-        User user = userContextService.getCurrentUser();
         Task task = getTaskById(id);
+        delete(task);
+    }
 
-        if(task.getOwner().getId() != user.getId()){
-            throw new UnAuthorizedException("UnAuthorized access");
-        }
-
+    @Override
+    public void delete(Task task){
         task.getAttachments()
                 .forEach(attachment -> {
                     try {
@@ -144,7 +129,6 @@ public class TaskServiceImp implements TaskService {
                         throw new RuntimeException(e);
                     }
                 });
-
         taskRepo.delete(task);
     }
 
@@ -153,20 +137,11 @@ public class TaskServiceImp implements TaskService {
     public String addAttachment(int taskId, MultipartFile file) throws IOException {
         User user = userContextService.getCurrentUser();
         Task task = getTaskById(taskId);
-
-        if(!task.getOwner().getUsername().equals(user.getUsername())
-                && !(task.getAssignedUser() != null && task.getAssignedUser().getUsername().equals(user.getUsername())))
-        {
-            throw new UnAuthorizedException("UnAuthorized access");
-        }
-
         if(attachmentService.existsByFileNameAndTaskId(file.getOriginalFilename(), taskId)){
             throw new BadRequestException("File already exists");
         }
-
         Attachment attachment = attachmentService.createAttachment(file);
         attachment.setUser(user);
-
         task.getAttachments().add(attachment);
         taskRepo.save(task);
         return "Attachment has been added successfully";
@@ -174,20 +149,20 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public String assignTaskToUser(int taskId, UUID userId) throws BadRequestException {
-        User user = userContextService.getCurrentUser();
-        Task task = getTaskById(taskId);
-        User assignedUser = userService.getUserById(userId);
-
-        if(!task.getOwner().getUuid().equals(user.getUuid())){
-                throw new UnAuthorizedException("UnAuthorized access");
-        }
-
-        if(task.getOwner().getUuid().equals(userId)){
-            throw new BadRequestException("Can not assign task to yourself!");
-        }
-
-        task.setAssignedUser(assignedUser);
-        taskRepo.save(task);
+//        User user = userContextService.getCurrentUser();
+//        Task task = getTaskById(taskId);
+//        User assignedUser = userService.getUserById(userId);
+//
+//        if(!task.getOwner().getUuid().equals(user.getUuid())){
+//                throw new UnAuthorizedException("UnAuthorized access");
+//        }
+//
+//        if(task.getOwner().getUuid().equals(userId)){
+//            throw new BadRequestException("Can not assign task to yourself!");
+//        }
+//
+//        task.setAssignedUser(assignedUser);
+//        taskRepo.save(task);
         return "task has been assigned to user successfully";
     }
 
@@ -230,6 +205,11 @@ public class TaskServiceImp implements TaskService {
     @Override
     public Set<TaskPriority> getTaskPriorities() {
         return Arrays.stream(TaskPriority.values()).collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean isTaskExistInProject(int taskId , int projectId) {
+        return taskRepo.existsTaskByIdAndProjectId(taskId , projectId);
     }
 
 }

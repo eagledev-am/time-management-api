@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.entities.enums;
+package com.eagledev.timemanagement.entities.enums;
 
 public enum Role {
     USER , ADMIN

@@ -1,6 +1,6 @@
-package com.eagledev.todoapi.repos;
+package com.eagledev.timemanagement.repos;
 
-import com.eagledev.todoapi.entities.Comment;
+import com.eagledev.timemanagement.entities.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

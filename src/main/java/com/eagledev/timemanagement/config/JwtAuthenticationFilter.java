@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.config;
+package com.eagledev.timemanagement.config;
 
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;

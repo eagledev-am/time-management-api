@@ -1,8 +1,6 @@
-package com.eagledev.todoapi.services.email;
+package com.eagledev.timemanagement.services.email;
 
-import jakarta.mail.Message;
 import jakarta.mail.internet.MimeMessage;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

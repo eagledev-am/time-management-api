@@ -1,6 +1,6 @@
-package com.eagledev.todoapi.repos;
+package com.eagledev.timemanagement.repos;
 
-import com.eagledev.todoapi.entities.User;
+import com.eagledev.timemanagement.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;;
 import java.util.Optional;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.models;
+package com.eagledev.timemanagement.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

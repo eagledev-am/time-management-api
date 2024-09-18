@@ -1,9 +1,9 @@
-package com.eagledev.todoapi.controlers;
+package com.eagledev.timemanagement.controlers;
 
-import com.eagledev.todoapi.models.Response;
-import com.eagledev.todoapi.models.comment.CommentModel;
-import com.eagledev.todoapi.models.comment.CommentRequest;
-import com.eagledev.todoapi.services.comment.CommentService;
+import com.eagledev.timemanagement.models.Response;
+import com.eagledev.timemanagement.models.comment.CommentModel;
+import com.eagledev.timemanagement.models.comment.CommentRequest;
+import com.eagledev.timemanagement.services.comment.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -85,7 +85,7 @@ public class CommentController {
     @Operation(
             tags = {"comments"},
             summary = "reply a comment" ,
-            description = "This endpoint used to send a reply to comment"
+            description = "This endpoint used to  reply a comment"
     )
     @ApiResponses(
             value = {
@@ -94,9 +94,9 @@ public class CommentController {
                     @ApiResponse(responseCode = "403" , description = "FORBIDDEN") ,
             }
     )
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/reply")
     @PreAuthorize("#commentRequest.authorId() == principal.uuid")
-    ResponseEntity<Response<CommentModel>> replyToComment(@PathVariable int id ,@Valid CommentRequest commentRequest){
+    ResponseEntity<Response<CommentModel>> replyToComment(@PathVariable int id ,@RequestBody @Valid CommentRequest commentRequest){
         Response<CommentModel> response = new Response<>(
                 "success" , "comment reply created successfully" , commentService.replyComment(id , commentRequest) , null
         );

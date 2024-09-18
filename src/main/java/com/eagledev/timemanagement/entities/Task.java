@@ -1,16 +1,12 @@
-package com.eagledev.todoapi.entities;
+package com.eagledev.timemanagement.entities;
 
-import com.eagledev.todoapi.entities.enums.Status;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.eagledev.timemanagement.entities.enums.Status;
+import com.eagledev.timemanagement.entities.enums.TaskPriority;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -35,9 +31,12 @@ public class Task {
     private Status status;
 
     @Column(updatable = false)
-    private LocalDateTime creationDate;
+    private Instant creationDate;
 
-    private LocalDateTime dueDate;
+    private Instant dueDate;
+
+    @Enumerated(EnumType.STRING)
+    private TaskPriority taskPriority;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -54,27 +53,26 @@ public class Task {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "owner")
+    private User owner;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.REMOVE})
+    @ManyToOne
+    @JoinColumn(name = "assigned_user")
+    private User assignedUser;
+
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "task_id")
     private Set<Comment> comments;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name = "task_id")
     private Set<Attachment> attachments;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.REMOVE})
-    @JoinColumn(name = "task_id")
-    private Set<Tag> tags;
-
-
 
 }

@@ -15,4 +15,5 @@ public interface AttachmentService {
     void deleteAttachment(Attachment attachment) throws IOException;
     Resource getAttachmentResource(String fileName) throws MalformedURLException, FileNotFoundException;
     Boolean existsByFileNameAndTaskId(String fileName, int taskId);
+    Boolean existsByFileNameAndProjectId(String fileName, int taskId);
 }

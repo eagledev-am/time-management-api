@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.models.user;
+package com.eagledev.timemanagement.models.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

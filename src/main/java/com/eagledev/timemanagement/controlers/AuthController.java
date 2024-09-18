@@ -1,11 +1,11 @@
-package com.eagledev.todoapi.controlers;
+package com.eagledev.timemanagement.controlers;
 
-import com.eagledev.todoapi.models.*;
-import com.eagledev.todoapi.models.auth.AuthRequest;
-import com.eagledev.todoapi.models.auth.JwtResponse;
-import com.eagledev.todoapi.models.user.UserCreationRequest;
-import com.eagledev.todoapi.models.auth.PasswordResetPassword;
-import com.eagledev.todoapi.services.auth.AuthService;
+import com.eagledev.timemanagement.models.*;
+import com.eagledev.timemanagement.models.auth.AuthRequest;
+import com.eagledev.timemanagement.models.auth.JwtResponse;
+import com.eagledev.timemanagement.models.user.UserCreationRequest;
+import com.eagledev.timemanagement.models.auth.PasswordResetPassword;
+import com.eagledev.timemanagement.services.auth.AuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

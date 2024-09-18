@@ -13,4 +13,10 @@ public interface AttachmentRepo extends JpaRepository<Attachment, Integer> {
                     "where " +
                     " (filename LIKE %:filename) and task_id = :taskId")
     Integer countByFilenameAndTaskId(@Param("filename") String filename, @Param("taskId") Integer taskId);
+
+    @Query(nativeQuery = true ,
+            value ="select count(*) from attachment  " +
+                    "where " +
+                    " (filename LIKE %:filename) and project_id = :projectId")
+    Integer countByFilenameAndProjectId(@Param("filename") String filename, @Param("projectId") Integer projectId);
 }

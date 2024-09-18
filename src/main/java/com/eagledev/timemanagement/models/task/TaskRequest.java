@@ -19,7 +19,7 @@ public record TaskRequest(
 
         @NotNull(message = "task priority is required")
         @ValidEnum(enumClass = TaskPriority.class)
-        TaskPriority priority ,
+        String priority ,
 
         @Future(message = "Due date should be in the future")
         Instant dueDate

@@ -1,4 +1,4 @@
-package com.eagledev.todoapi.models.user;
+package com.eagledev.timemanagement.models.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

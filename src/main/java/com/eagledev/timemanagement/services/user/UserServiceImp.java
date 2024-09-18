@@ -1,12 +1,12 @@
-package com.eagledev.todoapi.services.user;
+package com.eagledev.timemanagement.services.user;
 
-import com.eagledev.todoapi.entities.User;
-import com.eagledev.todoapi.exceptions.UserNotFoundException;
-import com.eagledev.todoapi.models.user.ChangePasswordModel;
-import com.eagledev.todoapi.models.user.UserModel;
-import com.eagledev.todoapi.repos.UserRepo;
-import com.eagledev.todoapi.services.filestore.FileService;
-import com.eagledev.todoapi.services.mappers.UserMapper;
+import com.eagledev.timemanagement.entities.User;
+import com.eagledev.timemanagement.exceptions.UserNotFoundException;
+import com.eagledev.timemanagement.models.user.ChangePasswordModel;
+import com.eagledev.timemanagement.models.user.UserModel;
+import com.eagledev.timemanagement.repos.UserRepo;
+import com.eagledev.timemanagement.services.filestore.FileService;
+import com.eagledev.timemanagement.services.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.coyote.BadRequestException;
@@ -42,6 +42,12 @@ public class UserServiceImp implements UserService {
     @Override
     public User getUserById(UUID id) {
         return findUserById(id);
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepo.findUserByUserName(username)
+                .orElseThrow(() ->  new UserNotFoundException("User not found !" , HttpStatus.NOT_FOUND.value()));
     }
 
 

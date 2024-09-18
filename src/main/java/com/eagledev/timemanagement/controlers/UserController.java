@@ -1,9 +1,9 @@
-package com.eagledev.todoapi.controlers;
+package com.eagledev.timemanagement.controlers;
 
-import com.eagledev.todoapi.models.Response;
-import com.eagledev.todoapi.models.user.ChangePasswordModel;
-import com.eagledev.todoapi.models.user.UserModel;
-import com.eagledev.todoapi.services.user.UserService;
+import com.eagledev.timemanagement.models.Response;
+import com.eagledev.timemanagement.models.user.ChangePasswordModel;
+import com.eagledev.timemanagement.models.user.UserModel;
+import com.eagledev.timemanagement.services.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;

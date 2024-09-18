@@ -1,5 +1,6 @@
-package com.eagledev.todoapi.entities;
+package com.eagledev.timemanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +22,8 @@ public class Attachment {
 
     private String fileUrl;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch=FetchType.EAGER)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "user_id")

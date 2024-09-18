@@ -13,7 +13,6 @@ import java.security.Principal;
 @Service
 @RequiredArgsConstructor
 public class UserContextServiceImp implements UserContextService {
-    private final UserRepo userRepo;
 
     @Override
     public User getCurrentUser() {

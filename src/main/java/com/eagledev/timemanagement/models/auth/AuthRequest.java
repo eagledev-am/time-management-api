@@ -1,6 +1,5 @@
-package com.eagledev.todoapi.models.auth;
+package com.eagledev.timemanagement.models.auth;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

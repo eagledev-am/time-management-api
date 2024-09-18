@@ -1,15 +1,15 @@
-package com.eagledev.todoapi.services.auth;
+package com.eagledev.timemanagement.services.auth;
 
-import com.eagledev.todoapi.entities.User;
-import com.eagledev.todoapi.entities.enums.Role;
-import com.eagledev.todoapi.exceptions.UserNotFoundException;
-import com.eagledev.todoapi.models.auth.AuthRequest;
-import com.eagledev.todoapi.models.auth.JwtResponse;
-import com.eagledev.todoapi.models.user.UserCreationRequest;
-import com.eagledev.todoapi.repos.UserRepo;
-import com.eagledev.todoapi.config.JwtService;
-import com.eagledev.todoapi.services.email.EmailService;
-import com.eagledev.todoapi.services.verification.VerificationCodeService;
+import com.eagledev.timemanagement.entities.User;
+import com.eagledev.timemanagement.entities.enums.Role;
+import com.eagledev.timemanagement.exceptions.UserNotFoundException;
+import com.eagledev.timemanagement.models.auth.AuthRequest;
+import com.eagledev.timemanagement.models.auth.JwtResponse;
+import com.eagledev.timemanagement.models.user.UserCreationRequest;
+import com.eagledev.timemanagement.repos.UserRepo;
+import com.eagledev.timemanagement.config.JwtService;
+import com.eagledev.timemanagement.services.email.EmailService;
+import com.eagledev.timemanagement.services.verification.VerificationCodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.coyote.BadRequestException;

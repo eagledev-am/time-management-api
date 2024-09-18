@@ -1,6 +1,6 @@
-package com.eagledev.todoapi.services.verification;
+package com.eagledev.timemanagement.services.verification;
 
-import com.eagledev.todoapi.entities.User;
+import com.eagledev.timemanagement.entities.User;
 import org.apache.coyote.BadRequestException;
 
 public interface VerificationCodeService {

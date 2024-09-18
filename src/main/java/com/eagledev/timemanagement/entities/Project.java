@@ -1,9 +1,9 @@
-package com.eagledev.todoapi.entities;
+package com.eagledev.timemanagement.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Set;
 
 @Entity
@@ -23,11 +23,9 @@ public class Project {
 
     private String description;
 
-    private LocalDateTime startDate;
+    private Instant startDate;
 
-    private LocalDateTime endDate;
-
-    private String avaterUrl;
+    private Instant endDate;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -37,12 +35,12 @@ public class Project {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL )
-    private Set<ProjectTeam> project_members;
+    private Set<ProjectMember> project_members;
 
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")
     private Set<Attachment> attachments;
 

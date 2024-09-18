@@ -1,15 +1,10 @@
-package com.eagledev.todoapi.services.filestore;
+package com.eagledev.timemanagement.services.filestore;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
@@ -20,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
+import java.util.UUID;
 
 
 @Service
@@ -31,17 +27,22 @@ public class FileServiceImp implements FileService{
         if (file == null){
             throw new BadRequestException("there is no file to upload");
         }
+
         Path path = Path.of(uploadPath);
         if(!Files.exists(path)){
             Files.createDirectories(path);
         }
-        Path filePath = path.resolve(Objects.requireNonNull(file.getOriginalFilename()));
+
+        String prefix = generateRandomPrefix();
+
+        Path filePath = path.resolve(prefix + "_" +Objects.requireNonNull(file.getOriginalFilename()));
         try(InputStream inputStream = file.getInputStream()){
             Files.copy(inputStream, filePath , StandardCopyOption.REPLACE_EXISTING);
         }catch (Exception ex){
             throw new IOException("Could not save image file: " + file.getOriginalFilename(), ex);
         }
-        return file.getOriginalFilename();
+
+        return prefix + "_" +Objects.requireNonNull(file.getOriginalFilename());
     }
 
     @Override
@@ -51,5 +52,18 @@ public class FileServiceImp implements FileService{
             throw new FileNotFoundException("file with this path " + fileName + "not found");
         }
         return new UrlResource(path.toUri());
+    }
+
+    @Override
+    public void deleteFile(String filename) throws IOException {
+        Path path = Path.of(filename);
+        if(!Files.exists(path)){
+            throw new FileNotFoundException("file with this path " + filename + "not found");
+        }
+        Files.delete(path);
+    }
+
+    private String generateRandomPrefix() {
+        return UUID.randomUUID().toString().substring(0, 8);
     }
 }

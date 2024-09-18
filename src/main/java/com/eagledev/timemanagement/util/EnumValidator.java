@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.Arrays;
 
-public class EnumValidator implements ConstraintValidator<ValidEnum, TaskPriority> {
+public class EnumValidator implements ConstraintValidator<ValidEnum,String> {
     private Class<? extends Enum<?>> enumClass;
 
     @Override
@@ -15,10 +15,10 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, TaskPriorit
     }
 
     @Override
-    public boolean isValid(TaskPriority value, ConstraintValidatorContext context) {
+    public boolean isValid(String value, ConstraintValidatorContext context) {
         if(value == null)
             return true;
         return Arrays.stream(enumClass.getEnumConstants())
-                .anyMatch(e -> e.name().equals(value.name()));
+                .anyMatch( e -> e.name().equals(value));
     }
 }

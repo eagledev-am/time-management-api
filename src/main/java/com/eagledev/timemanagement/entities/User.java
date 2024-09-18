@@ -1,6 +1,6 @@
-package com.eagledev.todoapi.entities;
+package com.eagledev.timemanagement.entities;
 
-import com.eagledev.todoapi.entities.enums.Role;
+import com.eagledev.timemanagement.entities.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -61,7 +61,7 @@ public class User implements UserDetails {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL )
-    private Set<ProjectTeam> project_members;
+    private Set<ProjectMember> project_members;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

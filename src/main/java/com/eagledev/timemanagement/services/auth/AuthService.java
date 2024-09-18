@@ -1,8 +1,8 @@
-package com.eagledev.todoapi.services.auth;
+package com.eagledev.timemanagement.services.auth;
 
-import com.eagledev.todoapi.models.auth.AuthRequest;
-import com.eagledev.todoapi.models.auth.JwtResponse;
-import com.eagledev.todoapi.models.user.UserCreationRequest;
+import com.eagledev.timemanagement.models.auth.AuthRequest;
+import com.eagledev.timemanagement.models.auth.JwtResponse;
+import com.eagledev.timemanagement.models.user.UserCreationRequest;
 
 public interface AuthService {
     String registerUser(UserCreationRequest userDtoRequest);

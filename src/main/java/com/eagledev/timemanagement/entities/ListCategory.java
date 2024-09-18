@@ -1,11 +1,14 @@
-package com.eagledev.todoapi.entities;
+package com.eagledev.timemanagement.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -25,20 +28,21 @@ public class ListCategory {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private LocalDateTime creationDate;
+    @CreatedDate
+    private Instant creationDate;
 
-    private LocalDateTime modifiedDate;
+    @LastModifiedDate
+    private Instant modifiedDate;
 
-    private String avatarUrl;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "list" , cascade = CascadeType.ALL)
-    private List<Task> tasks;
+    private Set<Task> tasks;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToOne(optional = false , cascade = CascadeType.PERSIST , fetch = FetchType.LAZY)
+    @ManyToOne(optional = false , fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 }
