@@ -1,19 +1,25 @@
-package com.eagledev.todoapi.services.listcategory;
+package com.eagledev.timemanagement.services.listcategory;
 
 
-import com.eagledev.todoapi.entities.ListCategory;
-import com.eagledev.todoapi.models.listcategory.ListCategoryDto;
-import com.eagledev.todoapi.models.listcategory.ListCategoryRequest;
-import com.eagledev.todoapi.models.task.TaskDto;
+import com.eagledev.timemanagement.entities.ListCategory;
+import com.eagledev.timemanagement.models.listcategory.ListCategoryDto;
+import com.eagledev.timemanagement.models.listcategory.ListCategoryPage;
+import com.eagledev.timemanagement.models.listcategory.ListCategoryRequest;
+import com.eagledev.timemanagement.models.task.TaskDto;
+import com.eagledev.timemanagement.models.task.TaskRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ListCategoryService {
-    List<ListCategoryDto> getUserLists();
-    ListCategory createList(ListCategoryRequest request);
-    ListCategory updateList(int listId , ListCategoryRequest request);
-    void deleteList();
-    List<TaskDto> getTasksOfList(int listId);
-    String uploadListImage(int listId , MultipartFile file);
+    Page<ListCategoryPage> getUserLists(Pageable pageable);
+    ListCategoryDto getList(int listId);
+    ListCategoryDto createList(ListCategoryRequest request);
+    ListCategoryDto updateList(int listId , ListCategoryRequest request);
+    void deleteList(int ListId);
+    Set<TaskDto> getTasksOfList(int listId);
+    TaskDto createTask(int listId , TaskRequest request);
 }
