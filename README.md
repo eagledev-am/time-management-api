@@ -1,8 +1,14 @@
-# TODO List API
-The Todo List API provides a powerful and flexible backend for managing tasks and to-dos in your applications. Designed with simplicity and extensibility in mind, this API enables seamless integration of task management functionalities.
+# Time Managemet Api
+The **Time Management System API** is designed to help users effectively organize and manage their tasks and projects. **Key features** include:
+- **Task Management**: The core unit where users define and track their activities and goals.
+- **Project Collaboration**: Users can create projects to manage related tasks. Admins and managers can assign team members, encouraging collaborative work.
+- **Task Categorization**: users can organize tasks into custom categories for better task prioritization and tracking.
+- **Communication**: Task discussions are facilitated through comments and replies, allowing for detailed communication between project members.
+- **File Sharing**: Members can attach files to tasks and projects, centralizing necessary resources and documentation.
+- **Notifications:** Keeps users informed about task updates, comments, and project changes through a notification system.
+
 
 # Table Of Contents
-* [Features](#Features)
 * [Getting Started](#GettingStarted)
   * [Prerequisites](#Prerequisites)
   * [Installation](#installation)
@@ -12,12 +18,8 @@ The Todo List API provides a powerful and flexible backend for managing tasks an
 * [Examples](#examples)
 * [Contact](#contact)
 
-<a name="Features"></a>
-#  Features
-* Task Operation: create,retrieve,update and delete task
-* Task List: Organize tasks into lists ( categories or tags )
-* User Authentication: use JWT to authenticate user accounts
-* Filtering and Search: find user tasks based on status
+
+
 <a name="GettingStarted"></a>
 # Getting Started 
 <a name="Prerequisites"></a>
@@ -72,38 +74,6 @@ docker compose down
  ```
   POST /api/auth/login
  ```
-<a name="Endpoints"></a>
- #### **Endpoints**
- * Tasks
-   </br>
-   | Method | Endpoint | description |
-   | :------: | :------: | :------:|
-   | GET | /api/tasks/:id | Get a task |
-   | POST | /api/lists/:list_id/tasks| Create a task at specified list |
-   | PUT | /api/tasks/:id  | Update a task |
-   | DELETE | /api/tasks/:id | Delete a task |
-   | GET | /api/users/:user_id/tasks | Get all tasks of user |
-   | GET | api/users/:user_id/tasks?status= | Get tasks based on status |
-   | GET | /api/lists/:list_id/tasks | Get all tasks of a list |
-* Lists
-  </br>
-     | Method | Endpoint | description |
-   | :------: | :------: | :------:|
-   | GET | /api/lists/:list_id/tasks| Get a tasks of a list |
-   | POST | /api/users/:user_id/lists| Create a list for a user |
-   | DELETE | /api/lists/:id| Delete a list |
-   | GET | /api/users/:id/lists | Get all list of a user |
-* User
-  </br>
-       | Method | Endpoint | description |
-   | :------: | :------: | :------:|
-   | GET | /api/users/:id| Get a user |
-   | PUT | /api/users/:id| Update user data |
-   | DELETE | /api/lists/:id| Delete a user |
-
-<a name="examples"></a>
-# Examples
-You can test api using [Postman](https://www.postman.com/navigation-astronomer-98011947/workspace/api/collection/29779062-3cdf8018-1481-4f33-9abd-e2dcc9ac0b5d?action=share&creator=29779062)
 
 <a name="contact"></a>
 # Contact
