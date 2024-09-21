@@ -49,21 +49,16 @@ public class AttachmentServiceImp implements AttachmentService{
     }
 
     @Override
-    public Attachment getAttachment(int id) {
-        return attachmentRepo.findById(id)
+    public Attachment getAttachment(String filename) {
+        return attachmentRepo.findByFilename(filename)
                 .orElseThrow(() -> new ResourceNotFound("Resource Not Found"));
     }
 
     @Transactional
     @Override
-    public void deleteAttachmentClient(int id) throws IOException {
-        User user = userContextService.getCurrentUser();
-        Attachment attachment = getAttachment(id);
-
-        if(attachment.getUser().getId() != user.getId()){
-            throw new UnAuthorizedException("You do not have permission to delete this attachment");
-        }
-
+    public void deleteAttachmentClient(String filename) throws IOException {
+        Attachment attachment = attachmentRepo.findByFilename(filename)
+                .orElseThrow(() -> new ResourceNotFound("Resource Not Found"));
         deleteAttachment(attachment);
     }
 

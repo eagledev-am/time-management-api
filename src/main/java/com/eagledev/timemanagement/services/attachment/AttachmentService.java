@@ -10,8 +10,8 @@ import java.net.MalformedURLException;
 
 public interface AttachmentService {
     Attachment createAttachment(MultipartFile file) throws IOException;
-    Attachment getAttachment(int id);
-    void deleteAttachmentClient(int id) throws IOException;
+    Attachment getAttachment(String filename);
+    void deleteAttachmentClient(String filename) throws IOException;
     void deleteAttachment(Attachment attachment) throws IOException;
     Resource getAttachmentResource(String fileName) throws MalformedURLException, FileNotFoundException;
     Boolean existsByFileNameAndTaskId(String fileName, int taskId);
