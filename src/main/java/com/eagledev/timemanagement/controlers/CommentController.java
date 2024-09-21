@@ -54,7 +54,7 @@ public class CommentController {
             }
     )
     @PutMapping("/{id}")
-    @PreAuthorize("#commentRequest.authorId() == principal.uuid")
+    @PreAuthorize("#commentRequest.authorId() == principal.uuid && @commentAuthorization.isCommentOwner(authentication , #id)")
     public ResponseEntity<Response<CommentModel>> updateComment(@PathVariable int id, @Valid @RequestBody CommentRequest commentRequest) {
         Response<CommentModel> response = new Response<>(
                 "success" , "comment updated successfully" , commentService.updateComment(id , commentRequest) , null
@@ -75,6 +75,7 @@ public class CommentController {
                     @ApiResponse(responseCode = "401" , description = "unauthorized access")
             }
     )
+    @PreAuthorize("@commentAuthorization.isCommentOwner(authentication , #id)")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable int id) {
         commentService.deleteComment(id);
