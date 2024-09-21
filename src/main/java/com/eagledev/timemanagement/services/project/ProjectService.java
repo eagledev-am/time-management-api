@@ -1,5 +1,7 @@
 package com.eagledev.timemanagement.services.project;
 
+import com.eagledev.timemanagement.entities.Project;
+import com.eagledev.timemanagement.entities.User;
 import com.eagledev.timemanagement.entities.enums.ProjectMemberRole;
 import com.eagledev.timemanagement.models.projectmember.ProjectMemberDto;
 import com.eagledev.timemanagement.models.project.ProjectDto;
@@ -33,4 +35,6 @@ public interface ProjectService {
     void deleteTask(int projectId , int taskId) throws BadRequestException;
     String assignTaskToUser(int projectId , TaskAssignRequest taskAssignRequest) throws BadRequestException;
     String uploadNewAttachment(int projectId , MultipartFile file) throws IOException;
+    Project getProjectByAttachmentId(int attachmentId);
+    Project getProjectByAttachmentFilename(String filename);
 }

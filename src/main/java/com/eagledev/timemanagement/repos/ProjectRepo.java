@@ -16,4 +16,22 @@ public interface ProjectRepo extends JpaRepository<Project, Integer> {
                     "WHERE pt.user.id = :id"
     )
     Page<Project> findAllByMemberId(@Param("id") int id , Pageable pageable);
+
+    @Query(
+            nativeQuery = true ,
+            value = "select * from project " +
+            "Join attachment " +
+            "on attachment.project_id = project.id " +
+            "Where attachment.id = :id"
+    )
+    Project findByAttachmentId(@Param("id") int attachmentId);
+
+    @Query(
+            value = "SELECT p.* " +
+            " FROM project p " +
+            " JOIN attachment a ON p.id = a.project_id " +
+            "WHERE a.filename = :filename"
+            , nativeQuery = true
+    )
+    Project findByAttachmentFileName(@Param("filename") String filename);
 }

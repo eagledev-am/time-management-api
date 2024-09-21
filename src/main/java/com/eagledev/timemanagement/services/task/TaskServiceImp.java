@@ -1,6 +1,7 @@
 package com.eagledev.timemanagement.services.task;
 
 import com.eagledev.timemanagement.entities.*;
+import com.eagledev.timemanagement.entities.enums.NotificationStatus;
 import com.eagledev.timemanagement.entities.enums.Status;
 import com.eagledev.timemanagement.entities.enums.TaskPriority;
 import com.eagledev.timemanagement.exceptions.ResourceNotFound;
@@ -14,16 +15,22 @@ import com.eagledev.timemanagement.repos.TaskRepo;
 import com.eagledev.timemanagement.services.attachment.AttachmentService;
 import com.eagledev.timemanagement.services.mappers.CommentMapper;
 import com.eagledev.timemanagement.services.mappers.TaskMapper;
+import com.eagledev.timemanagement.services.notification.NotificationService;
+import com.eagledev.timemanagement.services.project.ProjectService;
+import com.eagledev.timemanagement.services.project.ProjectServiceImp;
+import com.eagledev.timemanagement.services.projectmember.ProjectMemberService;
 import com.eagledev.timemanagement.services.security.UserContextService;
 import com.eagledev.timemanagement.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -44,6 +51,8 @@ public class TaskServiceImp implements TaskService {
     private final UserService userService;
     private final CommentMapper commentMapper;
     private final AttachmentService attachmentService;
+    private final NotificationService notificationService;
+    private final ProjectMemberService projectMemberService;
 
     @Override
     public Page<TaskPageDto> getTasksOfAuthenticatedUser(Pageable pageable) {
@@ -102,6 +111,7 @@ public class TaskServiceImp implements TaskService {
                 .build();
     }
 
+    @Transactional
     @Override
     public TaskDto updateTask(int id, TaskRequest taskRequest) {
         Task task = getTaskById(id);
@@ -109,14 +119,29 @@ public class TaskServiceImp implements TaskService {
         task.setDescription(taskRequest.description());
         task.setDueDate(taskRequest.dueDate());
         task.setTaskPriority(TaskPriority.valueOf(taskRequest.priority()));
+
+        if(task.getAssignedUser() != null){
+          notificationService.sendNotification(
+                  notification("The " + task.getTitle() + "has been updated " , getResourceUrl("/api/tasks/" +task.getId())),
+                  task.getAssignedUser()
+          );
+        }
+
         return mapper.toModel(taskRepo.save(task));
     }
 
-
+    @Transactional
     @Override
     public void deleteTask(int id) {
         Task task = getTaskById(id);
+        User assignedUser = task.getAssignedUser();
         delete(task);
+        if(assignedUser != null){
+            notificationService.sendNotification(
+                    notification("The " + task.getTitle() + "has been deleted" , "" ),
+                    task.getAssignedUser()
+            );
+        }
     }
 
     @Override
@@ -137,33 +162,24 @@ public class TaskServiceImp implements TaskService {
     public String addAttachment(int taskId, MultipartFile file) throws IOException {
         User user = userContextService.getCurrentUser();
         Task task = getTaskById(taskId);
+
         if(attachmentService.existsByFileNameAndTaskId(file.getOriginalFilename(), taskId)){
             throw new BadRequestException("File already exists");
         }
+
         Attachment attachment = attachmentService.createAttachment(file);
         attachment.setUser(user);
         task.getAttachments().add(attachment);
         taskRepo.save(task);
-        return "Attachment has been added successfully";
-    }
 
-    @Override
-    public String assignTaskToUser(int taskId, UUID userId) throws BadRequestException {
-//        User user = userContextService.getCurrentUser();
-//        Task task = getTaskById(taskId);
-//        User assignedUser = userService.getUserById(userId);
-//
-//        if(!task.getOwner().getUuid().equals(user.getUuid())){
-//                throw new UnAuthorizedException("UnAuthorized access");
-//        }
-//
-//        if(task.getOwner().getUuid().equals(userId)){
-//            throw new BadRequestException("Can not assign task to yourself!");
-//        }
-//
-//        task.setAssignedUser(assignedUser);
-//        taskRepo.save(task);
-        return "task has been assigned to user successfully";
+        if(task.getAssignedUser() != null){
+            notificationService.sendNotification(
+                    notification("A new Attachment has been added to task" + task.getTitle() , attachment.getFileUrl()),
+                    task.getAssignedUser()
+            );
+        }
+
+        return "Attachment has been added successfully";
     }
 
     @Override
@@ -178,6 +194,14 @@ public class TaskServiceImp implements TaskService {
                 .build();
         task.getComments().add(comment1);
         taskRepo.save(task);
+
+        if(task.getProject() != null) {
+            notificationService.sendNotificationsToUsers(
+                    notification("A Comment added to Task " + task.getTitle(), getResourceUrl("/api/comments/" + comment1.getId())),
+                    projectMemberService.getMembersByProjectId(task.getProject().getId())
+            );
+        }
+
         return commentMapper.toCommentModel(comment1);
     }
 
@@ -194,6 +218,11 @@ public class TaskServiceImp implements TaskService {
 
         task.setStatus((task.getStatus() == Status.COMPLETED)? Status.NOT_COMPLETED : Status.COMPLETED);
         taskRepo.save(task);
+        notificationService.sendNotification(
+                notification("The " + task.getTitle() + "status is updated" , getResourceUrl("/api/tasks/" +task.getId())),
+                task.getAssignedUser()
+        );
+
         return "tasks status has been updated successfully";
     }
 
@@ -212,4 +241,18 @@ public class TaskServiceImp implements TaskService {
         return taskRepo.existsTaskByIdAndProjectId(taskId , projectId);
     }
 
+    private Notification notification(String message , String resourceUrl){
+        return Notification.builder()
+                .message(message)
+                .notificationStatus(NotificationStatus.NOT_READ)
+                .creationTime(LocalDateTime.now())
+                .resourceUrl(resourceUrl)
+                .build();
+    }
+
+    private String getResourceUrl(String path){
+        return ServletUriComponentsBuilder.fromCurrentServletMapping()
+                .path(path)
+                .toUriString();
+    }
 }

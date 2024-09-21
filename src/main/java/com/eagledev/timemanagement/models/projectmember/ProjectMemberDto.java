@@ -9,6 +9,7 @@ public record ProjectMemberDto(
         String username ,
         String firstName ,
         String lastName ,
-        ProjectMemberRole role
+        ProjectMemberRole role ,
+        String profileImage
 ) {
 }

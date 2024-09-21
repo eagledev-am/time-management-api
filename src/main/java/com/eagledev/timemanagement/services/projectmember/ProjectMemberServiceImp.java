@@ -8,7 +8,8 @@ import com.eagledev.timemanagement.repos.ProjectMemberRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +28,11 @@ public class ProjectMemberServiceImp implements ProjectMemberService {
     }
 
     @Override
-    public List<ProjectMember> getMembersByProjectId(int projectId) {
-        return projectTeamRepo.findProjectMemberByProjectId(projectId);
+    public Set<User> getMembersByProjectId(int projectId) {
+        return projectTeamRepo.findProjectMemberByProjectId(projectId)
+                .stream()
+                .map(ProjectMember::getUser)
+                .collect(Collectors.toSet());
     }
 
     @Override

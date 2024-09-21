@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Set;
-import java.util.UUID;
 
 public interface TaskService {
     Page<TaskPageDto> getTasksOfAuthenticatedUser(Pageable pageable);
@@ -29,7 +28,6 @@ public interface TaskService {
     void deleteTask(int id);
     void delete(Task task);
     String addAttachment(int taskId , MultipartFile file) throws IOException;
-    String assignTaskToUser(int taskId, UUID userId) throws BadRequestException;
     CommentModel addCommentToTask(int taskId, CommentRequest comment);
     String updateTaskStatus(int taskId);
     Set<Status> getTasksStatus();

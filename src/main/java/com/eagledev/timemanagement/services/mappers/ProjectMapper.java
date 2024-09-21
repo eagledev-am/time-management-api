@@ -21,8 +21,8 @@ public interface ProjectMapper {
             @Mapping(target = "username", source = "member.user.username"),
             @Mapping(target = "firstName", source = "member.user.firstName"),
             @Mapping(target = "lastName", source = "member.user.lastName"),
-            @Mapping(target = "role" , source = "projectRole")
-
+            @Mapping(target = "role" , source = "projectRole") ,
+            @Mapping(target = "profileImage" , source = "member.user.profilePictureUrl")
     })
     ProjectMemberDto toProjectMemberDto(ProjectMember member);
 }

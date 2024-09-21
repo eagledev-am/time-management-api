@@ -1,6 +1,7 @@
 package com.eagledev.timemanagement.services.project;
 
 import com.eagledev.timemanagement.entities.*;
+import com.eagledev.timemanagement.entities.enums.NotificationStatus;
 import com.eagledev.timemanagement.entities.enums.ProjectMemberRole;
 import com.eagledev.timemanagement.entities.enums.TaskPriority;
 import com.eagledev.timemanagement.exceptions.ResourceNotFound;
@@ -15,6 +16,7 @@ import com.eagledev.timemanagement.repos.ProjectRepo;
 import com.eagledev.timemanagement.services.attachment.AttachmentService;
 import com.eagledev.timemanagement.services.mappers.ProjectMapper;
 import com.eagledev.timemanagement.services.mappers.TaskMapper;
+import com.eagledev.timemanagement.services.notification.NotificationService;
 import com.eagledev.timemanagement.services.security.UserContextService;
 import com.eagledev.timemanagement.services.task.TaskService;
 import com.eagledev.timemanagement.services.projectmember.ProjectMemberService;
@@ -26,8 +28,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,6 +47,9 @@ public class ProjectServiceImp implements ProjectService{
     private final TaskMapper taskMapper;
     private final TaskService taskService;
     private final AttachmentService attachmentService;
+    private final NotificationService notificationService;
+
+
 
     @Override
     public Page<ProjectPageDto> getProjects(Pageable pageable) {
@@ -81,7 +88,7 @@ public class ProjectServiceImp implements ProjectService{
         return projectMapper.toDto(projectRepo.save(project));
     }
 
-    // authorize request
+
     @Override
     public ProjectDto updateProject(int id, ProjectRequest request) {
         Project project = projectRepo.findById(id)
@@ -89,7 +96,12 @@ public class ProjectServiceImp implements ProjectService{
         project.setTitle(request.title());
         project.setDescription(request.description());
         project.setEndDate(request.endDate());
-        return projectMapper.toDto(projectRepo.save(project));
+        ProjectDto projectDto = projectMapper.toDto(projectRepo.save(project));
+        notificationService.sendNotificationsToUsers(
+                notification("The " + projectDto.title() + "details has been updated" , getResourceUrl("/api/projects/" + id)),
+                projectMemberService.getMembersByProjectId(project.getId())
+        );
+        return projectDto;
     }
 
     // authorize request
@@ -108,6 +120,10 @@ public class ProjectServiceImp implements ProjectService{
         project.getTaskSet()
                 .forEach(taskService::delete);
         projectRepo.delete(project);
+        notificationService.sendNotificationsToUsers(
+                notification("The " + project.getTitle() + "Project has been removed" , ""),
+                projectMemberService.getMembersByProjectId(project.getId())
+        );
     }
 
     @Transactional
@@ -126,6 +142,10 @@ public class ProjectServiceImp implements ProjectService{
                 .build();
         project.getProject_members().add(projectMember);
         projectRepo.save(project);
+        notificationService.sendNotification(
+                notification("You have been enrolled into project " + project.getTitle() , getResourceUrl("/api/projects/" + project.getId())),
+                user
+        );
         return "user added to project successfully";
     }
 
@@ -138,6 +158,10 @@ public class ProjectServiceImp implements ProjectService{
             throw new BadRequestException("User not found in this project");
         }
         projectMemberService.removeMember(user , project);
+        notificationService.sendNotification(
+                notification("You have been removed from project " + project.getTitle() , getResourceUrl("/projects/" + project.getId())),
+                user
+        );
         return "user removed from project successfully";
     }
 
@@ -184,6 +208,10 @@ public class ProjectServiceImp implements ProjectService{
         task.setProject(project);
         project.getTaskSet().add(task);
         projectRepo.save(project);
+        notificationService.sendNotificationsToUsers(
+                notification("A new Task is added to " + project.getTitle() , getResourceUrl("/api/projects/" + project.getId() + "/tasks/" + task.getId())),
+                projectMemberService.getMembersByProjectId(project.getId())
+        );
         return taskMapper.toModel(task);
     }
 
@@ -216,6 +244,10 @@ public class ProjectServiceImp implements ProjectService{
 
         project.getTaskSet().add(task);
         projectRepo.save(project);
+        notificationService.sendNotificationsToUsers(
+                notification("Task in project " + project.getTitle() + "is updated" , getResourceUrl("/api/projects/" + project.getId() + "/tasks/" + task.getId())),
+                projectMemberService.getMembersByProjectId(project.getId())
+        );
         return taskMapper.toModel(task);
     }
 
@@ -226,6 +258,10 @@ public class ProjectServiceImp implements ProjectService{
         if(!taskService.isTaskExistInProject(taskId , projectId)){
             throw new BadRequestException("Task not found");
         }
+        notificationService.sendNotificationsToUsers(
+                notification("Task in project " + project.getTitle() + "is deleted" , ""),
+                projectMemberService.getMembersByProjectId(project.getId())
+        );
         taskService.deleteTask(taskId);
     }
 
@@ -247,6 +283,10 @@ public class ProjectServiceImp implements ProjectService{
         task.setAssignedUser(user);
         project.getTaskSet().add(task);
         projectRepo.save(project);
+        notificationService.sendNotification(
+                notification("A new task assigned to you click to go "  , getResourceUrl("/api/projects/" + project.getId() + "/tasks/" + task.getId())),
+                user
+        );
         return "task assigned to user successfully";
     }
 
@@ -262,6 +302,36 @@ public class ProjectServiceImp implements ProjectService{
         attachment.setUser(user);
         project.getAttachments().add(attachment);
         projectRepo.save(project);
+        notificationService.sendNotificationsToUsers(
+                notification("A new attachment has been added to project " + project.getTitle(), attachment.getFileUrl()),
+                projectMemberService.getMembersByProjectId(project.getId())
+        );
         return "Attachment added successfully";
+    }
+
+
+    @Override
+    public Project getProjectByAttachmentId(int attachmentId){
+        return projectRepo.findByAttachmentId(attachmentId);
+    }
+
+    @Override
+    public Project getProjectByAttachmentFilename(String filename){
+        return projectRepo.findByAttachmentFileName(filename);
+    }
+
+    private Notification notification(String message , String resourceUrl){
+                return Notification.builder()
+                        .message(message)
+                        .notificationStatus(NotificationStatus.NOT_READ)
+                        .creationTime(LocalDateTime.now())
+                        .resourceUrl(resourceUrl)
+                        .build();
+    }
+
+    String getResourceUrl(String path){
+        return ServletUriComponentsBuilder.fromCurrentServletMapping()
+                .path(path)
+                .toUriString();
     }
 }
