@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
@@ -26,7 +27,7 @@ public class AttachmentController {
 
     @Operation(
             tags = "attachments" ,
-            summary = "GET Attachment By Id" ,
+            summary = "GET Attachment By filename" ,
             description = "This endpoint used to get attachment entity data"
     )
     @ApiResponses(
@@ -35,15 +36,16 @@ public class AttachmentController {
                     @ApiResponse(responseCode = "404", description = "Resource Not found")
             }
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<Attachment> getAttachment(@PathVariable int id) {
-        return new ResponseEntity<>(attachmentService.getAttachment(id) , HttpStatus.OK);
+    @PreAuthorize("@attachmentAuthorization.canGetResource(authentication , #filename)")
+    @GetMapping("/{filename}")
+    public ResponseEntity<Attachment> getAttachment(@PathVariable String filename) {
+        return new ResponseEntity<>(attachmentService.getAttachment(filename) , HttpStatus.OK);
     }
 
 
     @Operation(
             tags = "attachments" ,
-            summary = "DELETE Attachment By Id" ,
+            summary = "DELETE Attachment By filename" ,
             description = "This endpoint used to delete an attachment entity"
     )
     @ApiResponses(
@@ -54,9 +56,10 @@ public class AttachmentController {
 
             }
     )
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAttachment(@PathVariable int id) throws IOException {
-        attachmentService.deleteAttachmentClient(id);
+    @PreAuthorize("@attachmentAuthorization.canManageAttachment(authentication , #filename)")
+    @DeleteMapping("/file/{filename}")
+    public ResponseEntity<?> deleteAttachment(@PathVariable String filename) throws IOException {
+        attachmentService.deleteAttachmentClient(filename);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -74,6 +77,7 @@ public class AttachmentController {
                     @ApiResponse(responseCode = "404", description = "File Not found") ,
             }
     )
+    @PreAuthorize("@attachmentAuthorization.canGetResource(authentication , #filename)")
     @GetMapping(path = "/file/{filename}" , produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public Resource getAttachmentByFilename(@PathVariable String filename) throws MalformedURLException, FileNotFoundException {
         return attachmentService.getAttachmentResource(filename);
