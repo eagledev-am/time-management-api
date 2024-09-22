@@ -12,13 +12,15 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/test
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+    env_file:
+      - env.properties
   mysql:
     container_name: mysqldb
     image: mysql
     volumes:
       -  /home/user/Desktop/db:/var/lib/mysql
     ports: 
-     - "3306:3306"
+     - "3307:3307"
     environment:
       MYSQL_DATABASE: test
       MYSQL_ROOT_PASSWORD: root
