@@ -43,7 +43,7 @@ The **Time Management System API** is designed to help users effectively organiz
 <br>
 
 ```git
-git clone https://github.com/eagledev-am/todolist-api.git```
+git clone https://github.com/eagledev-am/todolist-api.git
 ```
 <br>
 
