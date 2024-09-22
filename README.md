@@ -9,73 +9,96 @@ The **Time Management System API** is designed to help users effectively organiz
 
 
 # Table Of Contents
-* [Getting Started](#GettingStarted)
-  * [Prerequisites](#Prerequisites)
-  * [Installation](#installation)
-* [Usage](#Usage)
-  * [Authentication](#Authentication)
-  * [Endpoints](#Endpoints)
-* [Examples](#examples)
-* [Contact](#contact)
+* [Technologies](#Technologies)
+* [Prerequisites](#Prerequisites)
+* [Installation](#installation)
 
 
 
-<a name="GettingStarted"></a>
-# Getting Started 
+<a name="Technologies"></a>
+
+## Technologies
+- Spring boot
+- Spring data jpa
+- JWT (security)
+- Spring Email
+- MySQL
+- Mapstruct (mapping)
+- Swagger
+- Maven
+- Docker
+
+
 <a name="Prerequisites"></a>
 ## Prerequisites
-* Java ( JDK 17 )
-* MySQL database ( your chioce )
+* Java ( JDK  )
+* MySQL database 
 * Maven
-* IDE ( your choice )
 * Postman or a similar tool for API testing
-* Docker
+* Docker (optional)
+
 <a name="installation"></a>
 ## installation
-1- clone repository
+1- Clone Repo
+<br>
+
+```git
+git clone https://github.com/eagledev-am/todolist-api.git```
 ```
-git clone https://github.com/eagledev-am/todolist-api.git
+<br>
+
+2- Create ```env.properities``` file in the ```classpath```  
+
+<br>
+ 
+> [!IMPORTANT]
+> - [ ] You can Get your App Password using this **[Link](https://myaccount.google.com/u/1/apppasswords)** <br> 
+> - [ ] Create **env.properites** in the **resources** dir
+
+<br>
+
 ```
-2- change application.properties 
+# db info
+DB_USERNAME=YOUR_DB_USERNAME
+DB_PASSWORD=YOUR_DB_PASSWORD
+
+# email
+MAIL_USERNAME=YOR_EMAIL
+MAIL_PASSWORD=GOOGLE_APP_PASSWORD
+
+# secret key
+SECRET_KEY=YOUR_SECRET_KEY
+
 ```
-spring.datasource.url=jdbc:mysql://localhost:3306/YOUR_DATABASE
-spring.datasource.password=YOUR_PASSWORD
-spring.datasource.username=YOUR_USERNAME
-server.port=8080
-```
-3-  run the following command in a terminal window (in the complete) directory:
+<br>
+
+3- Open ```cmd``` in the project dir and place this command :
+<br>
+
 ```
  ./mvnw spring-boot:run
 ```
-The application is running in <font color="blue"> http://localhost:8080 </font>
-## Another installation way
-1- run the following command in a terminal window (in the complete) directory:
+<br>
+
+<!-- ## To Run The project using docker Use this command 
+
+<br>
+
 ```
 docker compose up -d
-// This create two docker s' containers
-// one for application
-// one for database  
 ```
-The application is running in <font color="blue"> http://localhost:8080 </font></br>
-The database is running in <font color="blue"> http://localhost:3306 </font></br></br>
+
+
 2- To Stop and remove all containers 
 ```
 docker compose down
 ```
-<a name="Usage"></a>
-# Usage 
-<a name="Authentication"></a>
- ### **Authentication**
- Create new User:
- ```
-  POST /api/auth/register
- ```
- Authenticate user and Access Token
- ```
-  POST /api/auth/login
- ```
+-->
 
-<a name="contact"></a>
-# Contact
-**Email:** [magdyabdo484@gamil.com](mailto:magdyabdo484@gmail.com)
+> [!NOTE]
+> - [ ] The Project is Running in the port : ```8080```
+> - [ ] In your machine You can use this ```http://localhost:8080/{endpoint}``` to Call API
+> - [ ] Use **Swagger ui** to discover documentation of project ```http://localhost:8080/swagger-ui/index.html```
+
+
   
