@@ -4,7 +4,6 @@ public record ListCategoryPage(
         int id ,
         String title ,
         String description ,
-        String creationDate ,
-        String avatarUrl
+        String creationDate
 ) {
 }
