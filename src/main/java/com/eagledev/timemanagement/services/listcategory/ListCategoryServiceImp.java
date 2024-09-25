@@ -19,11 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -96,6 +94,17 @@ public class ListCategoryServiceImp implements ListCategoryService {
         ListCategory listCategory = listCategoryRepo.findById(listId)
                 .orElseThrow(() -> new ResourceNotFound("Resource Not Found"));
         Task task = taskService.createTask(request);
+        task.setList(listCategory);
+        listCategory.getTasks().add(task);
+        listCategoryRepo.save(listCategory);
+        return taskMapper.toModel(task);
+    }
+
+    @Override
+    public TaskDto enrollTask(int listId, int taskId, TaskRequest request) {
+        ListCategory listCategory = listCategoryRepo.findById(listId)
+                .orElseThrow(() -> new ResourceNotFound("Resource Not Found"));
+        Task task = taskService.getTaskById(taskId);
         task.setList(listCategory);
         listCategory.getTasks().add(task);
         listCategoryRepo.save(listCategory);

@@ -22,4 +22,5 @@ public interface ListCategoryService {
     void deleteList(int ListId);
     Set<TaskDto> getTasksOfList(int listId);
     TaskDto createTask(int listId , TaskRequest request);
+    TaskDto enrollTask(int listId, int taskId, TaskRequest request);
 }

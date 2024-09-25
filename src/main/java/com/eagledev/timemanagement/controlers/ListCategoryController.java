@@ -65,7 +65,7 @@ public class ListCategoryController {
     )
     @PostMapping
     public ResponseEntity<Response<ListCategoryDto>> createList(@RequestBody ListCategoryRequest request){
-        Response<ListCategoryDto> response = new Response<>("success" , "list retrieved successfully", listCategoryService.createList(request) , null);
+        Response<ListCategoryDto> response = new Response<>("success" , "list created successfully", listCategoryService.createList(request) , null);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
@@ -80,7 +80,7 @@ public class ListCategoryController {
     @PreAuthorize("@listCategoryAuthorization.isListOwner(authentication , #id)")
     @PutMapping("/{id}")
     public ResponseEntity<Response<ListCategoryDto>> updateList(@PathVariable int id , @RequestBody ListCategoryRequest request){
-        Response<ListCategoryDto> response = new Response<>("success" , "list retrieved successfully", listCategoryService.updateList(id , request) , null);
+        Response<ListCategoryDto> response = new Response<>("success" , "list updated successfully", listCategoryService.updateList(id , request) , null);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
@@ -110,7 +110,7 @@ public class ListCategoryController {
     @PreAuthorize("@listCategoryAuthorization.isListOwner(authentication , #id)")
     @GetMapping("/{id}/tasks")
     public ResponseEntity<Response<Set<TaskDto>>> getTaskSet(@PathVariable int id , @RequestBody ListCategoryRequest request){
-        Response<Set<TaskDto>> response = new Response<>("success" , "list retrieved successfully", listCategoryService.getTasksOfList(id) , null);
+        Response<Set<TaskDto>> response = new Response<>("success" , "task retrieved successfully", listCategoryService.getTasksOfList(id) , null);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
@@ -124,7 +124,21 @@ public class ListCategoryController {
     @PreAuthorize("@listCategoryAuthorization.isListOwner(authentication , #id)")
     @PostMapping("/{id}/tasks")
     public ResponseEntity<Response<TaskDto>> createTask(@PathVariable int id , @RequestBody TaskRequest request){
-        Response<TaskDto> response = new Response<>("success" , "list retrieved successfully", listCategoryService.createTask(id , request) , null);
+        Response<TaskDto> response = new Response<>("success" , "task created successfully", listCategoryService.createTask(id , request) , null);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
+
+    @Operation(
+            tags = {"lists" , "tasks"} ,
+            summary = "Enroll A Task In List" ,
+            description = "This endpoint used to enroll a task in list"
+            ,security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @PreAuthorize("@listCategoryAuthorization.isListOwner(authentication , #listId) && (@taskAuthorization.isOwner(authentication , #taskId) || @taskAuthorization.isAssignedUser(authentication , #taskId))")
+    @PostMapping("/{listId}/tasks/{taskId}")
+    public ResponseEntity<Response<TaskDto>> enrollTask(@PathVariable int listId , @PathVariable int taskId , @RequestBody TaskRequest request){
+        Response<TaskDto> response = new Response<>("success" , "task enrolled successfully", listCategoryService.enrollTask(listId , taskId , request) , null);
+        return new ResponseEntity<>(response , HttpStatus.OK);
+    }
+
 }

@@ -38,12 +38,9 @@ public class TaskController {
             description = "This endpoint used to get all tasks of authenticated user"
     )
     @GetMapping
-    public ResponseEntity<Response<Page<TaskPageDto>>> getAllTasks(@RequestParam(defaultValue = "0") int pageNo , @RequestParam(defaultValue = "25") int pageSize) {
+    public ResponseEntity<Page<TaskPageDto>> getAllTasks(@RequestParam(defaultValue = "0") int pageNo , @RequestParam(defaultValue = "25") int pageSize) {
         Pageable pageable = PageRequest.of(pageNo , pageSize , Sort.by("creationDate").descending());
-        Response<Page<TaskPageDto>> response = new Response<>(
-                "success" , "tasks retrieved successfully" , taskService.getTasksOfAuthenticatedUser(pageable) , null
-        );
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(taskService.getTasksOfAuthenticatedUser(pageable));
     }
 
 
