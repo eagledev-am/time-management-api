@@ -13,7 +13,8 @@ The **Time Management System API** is designed to help users effectively organiz
 * [Prerequisites](#Prerequisites)
 * [Installation](#installation)
 * [Test](#test)
-  
+* [ERD Digram](#erd)
+* [License](#license)
 
 
 
@@ -128,9 +129,12 @@ docker-compose down
 ## Test
 [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/29779062-32ae97d6-7138-48f4-bc99-73f0216e7f33?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D29779062-32ae97d6-7138-48f4-bc99-73f0216e7f33%26entityType%3Dcollection%26workspaceId%3Df05a19fb-5bb8-4877-93aa-ca3c9a8411ba)
 
-
+<a name="erd"></a>
 ## ERD Digram
 ![erd](https://github.com/eagledev-am/time-management-api/blob/main/pictures/erd.png)
 
+<a name="license"></a>
+## License
+This project is licensed under MIT license. See [LICENSE](https://github.com/eagledev-am/time-management-api/blob/main/LICENSE) for details.
 
 
