@@ -13,6 +13,7 @@ The **Time Management System API** is designed to help users effectively organiz
 * [Prerequisites](#Prerequisites)
 * [Installation](#installation)
 * [Test](#test)
+* 
   
 
 
@@ -22,8 +23,9 @@ The **Time Management System API** is designed to help users effectively organiz
 ## Technologies
 - Spring boot
 - Spring data jpa
-- JWT (security)
+- Spring security with JWT
 - Spring Email
+- Realtime notifications using Websocket
 - MySQL
 - Mapstruct (mapping)
 - Swagger
@@ -130,4 +132,6 @@ docker-compose down
 
 ## ERD Digram
 ![erd](https://github.com/eagledev-am/time-management-api/blob/main/pictures/erd.png)
+
+
 
