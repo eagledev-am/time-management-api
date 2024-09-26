@@ -137,7 +137,7 @@ public class ListCategoryController {
     @PreAuthorize("@listCategoryAuthorization.isListOwner(authentication , #listId) && (@taskAuthorization.isOwner(authentication , #taskId) || @taskAuthorization.isAssignedUser(authentication , #taskId))")
     @PostMapping("/{listId}/tasks/{taskId}")
     public ResponseEntity<Response<TaskDto>> enrollTask(@PathVariable int listId , @PathVariable int taskId , @RequestBody TaskRequest request){
-        Response<TaskDto> response = new Response<>("success" , "task enrolled successfully", listCategoryService.enrollTask(listId , taskId , request) , null);
+        Response<TaskDto> response = new Response<>("success" , listCategoryService.enrollTask(listId , taskId , request), null , null);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 

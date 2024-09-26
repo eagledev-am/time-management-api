@@ -101,13 +101,13 @@ public class ListCategoryServiceImp implements ListCategoryService {
     }
 
     @Override
-    public TaskDto enrollTask(int listId, int taskId, TaskRequest request) {
+    public String enrollTask(int listId, int taskId, TaskRequest request) {
         ListCategory listCategory = listCategoryRepo.findById(listId)
                 .orElseThrow(() -> new ResourceNotFound("Resource Not Found"));
         Task task = taskService.getTaskById(taskId);
         task.setList(listCategory);
         listCategory.getTasks().add(task);
         listCategoryRepo.save(listCategory);
-        return taskMapper.toModel(task);
+        return "tasks enrolled successfully";
     }
 }
