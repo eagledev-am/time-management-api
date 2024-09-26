@@ -9,6 +9,7 @@ import com.eagledev.timemanagement.services.security.UserContextService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -20,6 +21,7 @@ public class NotificationServiceImp implements NotificationService {
 
     private final NotificationRepo notificationRepo;
     private final UserContextService userContextService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Override
     public Page<Notification> getNotifications(Pageable pageable) {
@@ -41,11 +43,15 @@ public class NotificationServiceImp implements NotificationService {
     public void sendNotification(Notification notification, User user) {
         notification.setUser(user);
         notificationRepo.save(notification);
-        sendNotification(notification);
+        send(notification , user.getUsername());
     }
 
-    // TODO implement a real time notification using websocket
-    public void sendNotification(Notification notification) {
+    public void send(Notification notification , String username) {
+        simpMessagingTemplate.convertAndSendToUser(
+                username ,
+                "/notification" ,
+                notification
+        );
     }
 
     @Override
