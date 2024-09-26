@@ -13,7 +13,6 @@ The **Time Management System API** is designed to help users effectively organiz
 * [Prerequisites](#Prerequisites)
 * [Installation](#installation)
 * [Test](#test)
-* 
   
 
 
